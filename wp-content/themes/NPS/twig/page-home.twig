@@ -1,0 +1,196 @@
+{% extends 'layouts/base.twig' %}
+{% set extra_body_classes = (default_version) ? 'default-version' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% embed 'components/masthead.twig' with masthead %}
+    {% endembed %}
+
+    {# DROPDOWN #}
+    <div class="industry-dropdown-outer">
+        <div class="container industry-dropdown">
+                <div class="dropdown">
+                    <div class="row">
+                        <div class="text col-xs-9">
+                            <div>Find My Industry</div>
+                        </div>
+                        <div class="chevrons-container col-xs-3">{{ '[chevrons position="down" color="white"]'|shortcodes }}</div>
+                    </div>
+                </div>
+                <div class="dropdown-options">
+                    <ul>
+                    {% for item in home_industry_dropdown %}
+                        <li class="item">
+                            <a href="{{ item.page }}">{{ item.industry.name }}</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# BIG LIST #}
+    <div class="big-list-outer">
+        <div class="container">
+            {% embed 'components/big-list.twig' with { title : section.big_list_title, list : section.big_list_list } %}
+            {% endembed %}
+
+            {% if(section.big_list_content) %}
+                <div class="big-list-content">{{ section.big_list_content }}</div>
+            {% endif %}
+
+            <div class="big-list-link">
+                <a href="{{ section.big_list_link }}">{{ section.big_list_link_text }} {{ '[chevrons size="sm" color="lt-green"]'|shortcodes }}</a>
+            </div>
+        </div>
+    </div>
+
+    {# TESTIMONIALS #}
+    {% set hash = [] %}
+    {% if section.testimonials_custom_testimonial %}
+        {% for t_item in section.testimonials_quotes %}
+            {% set hash = hash|merge([{ content : t_item.quote, name : t_item.name, company : t_item.company }]) %}
+        {% endfor %}
+    {% else %}
+        {% for t_item in section.testimonials_existing_testimonials %}
+            {% set hash = hash|merge([{ content : function('get_field', 'content', t_item.ID), name : function('get_field', 'name', t_item.ID), company : function('get_field', 'company', t_item.ID) }]) %}
+        {% endfor %}
+    {% endif %}
+
+    {% embed 'components/testimonials.twig' with { more_btn: (default_version) ? false : true, background_img : section.testimonials_background_image.url, testimonials : hash } %}
+    {% endembed %}
+
+    {# CTA #}
+    <div class="cta-outer">
+        <div class="container">
+            <div class="row">
+                {# LEFT #}
+                <div class="col-xs-12 col-md-7 cta-container">
+                    <h4 class="cta-title">{{ section.cta_headline }}</h4>
+                    <div class="cta-content">{{ section.cta_content }}</div>
+                    <div class="btn-container">
+                        <a href="{{ section.cta_link }}" {{ (section.cta_new_tab) ? 'target="_blank"' }} class="btn btn-blue">
+                            <span class="btn-text">{{ section.cta_button_text }}</span>
+                            {{ '[chevrons size="md"]'|shortcodes }}
+                        </a>
+                    </div>
+                </div>
+                {# RIGHT #}
+                <div class="col-xs-12 col-md-5 cta-right-container">
+                    <div class="cta-right">
+                        <div class="wrap">
+                            <h4 class="cta-right-title">{{ section.cta_right_headline }}</h4>
+                            <div class="cta-right-content">
+                                {% set cta_right_img = section.cta_right_image %}
+                                <div class="row">
+                                    {% if cta_right_img %}
+                                       <div class="hidden-xs hidden-sm col-md-5">
+                                           <img src="{{ cta_right_img.url }}" alt="{{ section.cta_right_headline }}" />
+                                       </div>
+                                    {% endif %}
+
+                                    <div class="promo-content-wrap col-xs-12 {{ (cta_right_img) ? 'col-md-7' : 'col-md-12' }}">
+                                        <div class="promo-content">
+                                            {{ section.cta_right_content }}
+                                        </div>
+
+                                        {% set type_of_link = section.type_of_link %}
+                                        {% if type_of_link == 'page' %}
+                                            <a href="{{ section.cta_right_link }}" {{ (section.cta_right_new_tab) ? 'target="_blank"' }} class="btn btn-blue">
+                                                <span class="btn-text">{{ section.cta_right_button_text }}</span>
+                                                {{ '[chevrons size="md"]'|shortcodes }}
+                                            </a>
+                                        {% else %}
+                                            <div class="promo-form-btn btn btn-blue" data-title="{{ section.form_title }}">
+                                                <span class="btn-text">{{ section.cta_right_button_text }}</span>
+                                                {{ '[chevrons size="sm"]'|shortcodes }}
+                                            </div>
+                                            <div class="hidden-form hidden">{{ section.form }}</div>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# LOGOS #}
+    {% if section.logos %}
+        <div class="logos-outer">
+            <div class="container">
+                {% set hash = [] %}
+                {% for logo in section.logos %}
+                    {% set hash = hash|merge([{ title : logo.post_title, img_src : function('get_field', 'logo', logo.ID).url }]) %}
+                {% endfor %}
+                {% embed 'components/logos.twig' with { logos: hash } %}
+                {% endembed %}
+            </div>
+        </div>
+    {% endif %}
+
+    {# RELATED SEMINARS AND NEWS #}
+    {% if upcoming_seminars or news %}
+    <div class="related-posts-outer background-dk-blue color-white">
+        <div class="container">
+            <div class="row">
+
+                {# SEMINARS #}
+                {% if upcoming_seminars %}
+                    <div class="col-xs-12 {{ (news) ? 'col-sm-7 col-md-6' }}">
+                        <h2 class="color-lt-green">Upcoming Seminars</h2>
+                        <div class="seminars-container">
+                            {% for seminar in upcoming_seminars %}
+                                <div class="seminar item row">
+                                    <div class="info col-xs-8 col-sm-9">
+                                        <a class="title" href="{{ seminar.link }}">{{ seminar.title }}</a>
+                                        <div class="date">{{ seminar.get_field('seminar_date')|date }}</div>
+                                        <div class="excerpt">{{ seminar.get_preview(20, false, '') }}</div>
+                                    </div>
+                                    <div class="read-more col-xs-4 col-sm-3">
+                                        <div class="location">{{ seminar.get_field('location_city_state') }}</div>
+                                        <a href="{{ seminar.link }}" class="btn btn-blue">
+                                            <span class="text">Read</span>
+                                            {{ '[chevrons size="xs"]'|shortcodes }}
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {# NEWS #}
+                {% if news %}
+                    <div class="col-xs-12 {{ (upcoming_seminars) ? 'col-sm-5 col-md-5 col-md-offset-1' }}">
+                        <h2 class="color-lt-green">In The News</h2>
+                        <div class="news-container">
+                            {% for news_post in news %}
+                                <div class="news-post item row">
+                                    <div class="info col-xs-8 col-sm-9">
+                                        <a class="title" href="{{ news_post.link }}">{{ news_post.title }}</a>
+                                        <div class="excerpt">{{ news_post.get_preview(20, false, '') }}</div>
+                                    </div>
+                                    <div class="read-more col-xs-4 col-sm-3">
+                                        <a href="{{ news_post.link }}" class="btn-chevron">
+                                            {{ '[chevrons size="sm" color="blue"]'|shortcodes }}
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock %}

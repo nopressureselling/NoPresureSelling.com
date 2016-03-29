@@ -1,0 +1,26 @@
+{% if pages|length > 0 %}
+<div id="sidebar" role="complementary" itemscope itemtype="http://schema.org/SiteNavigationElement">
+    <select class="visible-xs visible-sm">
+        {% for link in pages %}
+            {% set selected = (post.slug == link.slug) ? 'selected' : '' %}
+            <option value="{{ link.permalink }}" {{ selected }}>{{ link.title }}</option>
+        {% endfor %}
+    </select>
+
+    <ul class="hidden-xs hidden-sm">
+    {% for link in pages %}
+        <li>
+            {% if post.slug != link.slug %}
+            <a href="{{ link.permalink }}">
+            {% else %}
+                {{ '[chevrons position="left" size="xs" color="blue"]'|shortcodes }}
+            {% endif %}
+                {{ link.title }}
+            {% if post.slug != link.slug %}
+            </a>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}

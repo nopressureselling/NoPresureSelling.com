@@ -1,0 +1,74 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+    <div class="container">
+        {% if breadcrumbs %}
+            <div class="row breadcrumb-container">
+                <div class="col-xs-12">
+                    {% import "macros/breadcrumbs.twig" as macro %}
+                    {{ macro.build_breadcrumbs(breadcrumbs) }}
+                </div>
+            </div>
+        {% endif %}
+
+        <h1>{{ post.title }}</h1>
+    </div>
+
+    {# CONTENT #}
+    {% import "macros/sections.twig" as page %}
+    {{ page.build_sections(_context) }}
+
+    {% set seminars = post.get_field('related_seminar') %}
+
+    {% set show_seminars = false %}
+    {% for seminar in seminars %}
+        {% if seminar.post_status == 'publish' %}
+            {% set show_seminars = true %}
+        {% endif %}
+    {% endfor %}
+
+    {% if show_seminars %}
+        <div class="container">
+            <div class="seminar-section">
+                <h2 class="color-blue">Upcoming Seminars</h2>
+                <ul class="seminars">
+                    {% for seminar in seminars %}
+                        {% if seminar.post_status == 'publish' %}
+                            {% set link = function('get_permalink', seminar.ID) %}
+                            <li class="seminar">
+                                <div class="row">
+                                    <div class="title-date col-sm-9 col-xs-12">
+                                        <h3 class="seminar-title"><a href="{{ link }}">{{ seminar.post_title }}</a></h3>
+                                    </div>
+                                    <div class="link hidden-xs col-sm-3">
+                                        <a href="{{ link }}">Details{{ '[chevrons color="blue" position="right"]'|shortcodes }}</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="date"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> {{ seminar.seminar_date|date('F j, Y') }}</div>
+                                    </div>
+                                </div>
+                                <div class="row content">
+                                    <div class="col-xs-12">
+                                        <p>{{ seminar.post_content|excerpt(50) }}</p>
+
+                                        <div class="link visible-xs">
+                                            <a href="{{ link }}">Details{{ '[chevrons color="blue" position="right"]'|shortcodes }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="container">
+        {% import "macros/back_button.twig" as macro %}
+        {{ macro.build_button('Course Catalog', back_link) }}
+    </div>
+{% endblock %}

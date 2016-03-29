@@ -1,0 +1,18 @@
+{#
+
+VARS
+----
+color : string - blue or white
+img_src : string - (optional)
+vimeo_title : string
+vimeo_id : string
+
+#}
+
+<div class="component video-thumbnail {{ color }}" data-vimeo-title="{{ vimeo_title }}" data-vimeo-id="{{ vimeo_id }}">
+    <div class="text">Watch Video</div>
+    <div class="icon"></div>
+    <div class="thumb">
+        <img src="{{ (img_src != '') ? img_src|resize(300, 300) : site.theme.uri~'/assets/production/images/default-video-thumb.jpg' }}" alt="Watch Video"/>
+    </div>
+</div>

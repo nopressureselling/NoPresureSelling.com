@@ -1,0 +1,58 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with { background_img : masthead['image'], text : masthead['text'] } %}
+        {% endembed %}
+    {% endif %}
+
+    {# CONTENT #}
+    {% embed 'layouts/two-column-right.twig' %}
+        {% block content %}
+            {% if masthead is empty %}
+                <h1>{{ post.title }}</h1>
+            {% endif %}
+
+            {{ post.content }}
+
+            <ul class="seminars">
+                {% for seminar in seminars %}
+                    <li class="seminar">
+                        <div class="row">
+                            <div class="title-date col-xs-12 col-sm-9">
+                                <h3 class="title">
+                                    <a href="{{ seminar.permalink }}">
+                                        {{ seminar.title }}
+                                    </a>
+                                </h3>
+                                <div class="date">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                    <span class="text">{{ seminar.seminar_date|date('m-d-Y') }} {{ (seminar.seminar_end_date) ? ' - '~seminar.seminar_end_date|date('m-d-Y') }}</span>
+                                </div>
+                            </div>
+                            <div class="links hidden-xs col-sm-3">
+                                <a href="{{ seminar.permalink }}">
+                                    Details{{ '[chevrons size="xs" color="blue"]'|shortcodes }}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="content col-sm-12">
+                                {% set excerpt = seminar.get_field('content_excerpt') %}
+                                {{ ( excerpt ) ? excerpt : seminar.get_preview(100, false, '') }}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endblock %}
+
+        {% block sidebar %}
+            {{ sidebar }}
+            {{ promo_sidebar }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

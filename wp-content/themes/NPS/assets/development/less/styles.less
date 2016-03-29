@@ -1,0 +1,47 @@
+/* FONTS
+   ========================================================================== */
+@import "globals/fonts.less";
+
+/* LIBRARIES
+   ========================================================================== */
+@import "../bower_components/bootstrap/less/bootstrap.less";
+@import "../bower_components/lesshat/build/lesshat-prefixed.less";
+@import "../bower_components/animate.css-less/animate.less";
+@import (less) '../bower_components/wordpress-core-styles/styles.css';
+@import (less) '../bower_components/owlcarousel/owl-carousel/owl.carousel.css';
+@import (less) '../bower_components/owlcarousel/owl-carousel/owl.theme.css';
+@import (less) '../bower_components/icomoon/dist/css/style.css';
+
+/* GLOBALS
+   ========================================================================== */
+@import 'globals/variables.less';
+@import 'globals/colors.less';
+@import "globals/font-sizes.less";
+@import "globals/keyframes.less";
+@import "globals/mixins.less";
+@import "globals/shared.less";
+
+/* LAYOUTS
+   ========================================================================== */
+@import "layouts/base.less";
+
+/* COMPONENTS
+   ========================================================================== */
+@import "components/testimonials.less";
+@import "components/sidebar.less";
+@import "components/sidebar-promotion.less";
+@import "components/banner-promotion.less";
+
+
+/* PAGES
+   ========================================================================== */
+@import "pages/page-home.less";
+@import "pages/books-resources.less";
+@import "pages/page-news.less";
+@import "pages/page-epk.less";
+
+// Will hates the admin bar
+html#html-container{ margin-top: 0 !important;}
+#wpadminbar{
+   display: none !important;
+}

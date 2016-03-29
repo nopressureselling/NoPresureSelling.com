@@ -1,0 +1,51 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with { background_img : masthead['image'], text : masthead['text'] } %}
+        {% endembed %}
+    {% endif %}
+
+    {% embed 'layouts/two-column-right.twig' %}
+        {% block content %}
+
+            {% if masthead is empty %}
+                <h1>{{ post.title }}</h1>
+            {% endif %}
+
+            {{ post.content }}
+
+            <ul>
+                {% for press in press_post %}
+                    <li class="press">
+                        <div class="row vertical-padding">
+                            <div class="col-xs-12 col-md-11">
+                                <div class="title"><a href="{{ site.url }}/news-press/{{ press.post_name }}">{{ press.title }}</a></div>
+                                <p>{{ press.get_preview(100, false, '') }}</p>
+                            </div>
+                            <div class="col-xs-12 col-md-1 chevron-container">
+                                <a href="{{ site.url }}/news-press/{{ press.post_name }}">
+                                    <span class="read-more visible-xs-inline visible-sm-inline">Read More</span> {{ '[chevrons color="blue" position="right" size="xs"]'|shortcodes }}
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                {%  endfor %}
+            </ul>
+
+            {% if pages %}
+                {% import "macros/pagination.twig" as pagination %}
+                {{ pagination.build_nav(pages) }}
+            {% endif %}
+
+        {% endblock %}
+
+        {% block sidebar %}
+            {{ sidebar }}
+            {{ promo_sidebar }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

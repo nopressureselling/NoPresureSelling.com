@@ -1,0 +1,122 @@
+{% if industry %}
+<div id="sidebar" data-meh="meh" role="complementary" itemscope itemtype="http://schema.org/SiteNavigationElement">
+    <h3>{{ industry.name }}</h3>
+    <select class="visible-xs visible-sm">
+        {% if onsite_training|length > 0 %}
+            {% set current = (onsite_training|first.permalink == post.permalink) ? 'selected' : '' %}
+            <option value="{{ onsite_training|first.permalink }}" {{ current }}>Onsite Training</option>
+        {% endif %}
+
+        {% if virtual_training|length > 0 %}
+            {% set current = (virtual_training|first.permalink == post.permalink) ? 'selected' : '' %}
+            <option value="{{ virtual_training|first.permalink }}" {{ current }}>Virtual Training</option>
+        {% endif %}
+
+        {% if course_catalog|length > 0 %}
+            {% set current = (url~'/course-catalog/'~industry.slug~'/' == post.permalink) ? 'selected' : '' %}
+            <option value="{{ url }}/course-catalog/{{ industry.slug }}" {{ current }}>Course Catalog</option>
+        {% endif %}
+
+        {% if upcoming_seminars|length > 0 %}
+            {% set current = (url~'/upcoming-seminars/'~industry.slug~'/' == post.permalink) ? 'selected' : '' %}
+            <option value="{{ url }}/upcoming-seminars/{{ industry.slug }}" {{ current }}>Upcoming Seminars</option>
+        {% endif %}
+
+        {% if testimonials|length > 0 %}
+            {% set current = (url~'/testimonials/'~industry.slug~'/' == post.permalink) ? 'selected' : '' %}
+            <option value="{{ url }}/testimonials/{{ industry.slug }}" {{ current }}>Testimonials</option>
+        {% endif %}
+
+        {% if books_resources|length > 0 %}
+            {% set current = (url~'/books-resources/'~industry.slug~'/' == post.permalink) ? 'selected' : '' %}
+            <option value="{{ url }}/books-resources/{{ industry.slug }}" {{ current }}>Books &amp; Resources</option>
+        {% endif %}
+    </select>
+    <ul class="hidden-xs hidden-sm">
+        {% if onsite_training|length > 0 %}
+            {% set current = (onsite_training|first.permalink == post.permalink) ? '1' : '' %}
+            <li>
+                {% if current is empty %}
+                    <a href="{{ onsite_training|first.permalink }}">
+                {% else %}
+                    {{ '[chevrons position="left" size="xs" color="blue"]'|shortcodes }}
+                {% endif %}
+                    Onsite Training
+                {% if current is empty %}
+                    </a>
+                {% endif %}
+            </li>
+        {% endif %}
+        {% if virtual_training|length > 0 %}
+            {% set current = (virtual_training|first.permalink == post.permalink) ? '1' : '' %}
+            <li>
+                {% if current is empty %}
+                    <a href="{{ virtual_training|first.permalink }}">
+                {% else %}
+                    {{ '[chevrons position="left" size="xs" color="blue"]'|shortcodes }}
+                {% endif %}
+                    Virtual Training
+                {% if current is empty %}
+                    </a>
+                {% endif %}
+            </li>
+        {% endif %}
+        {% if course_catalog|length > 0 %}
+            {% set current = (url~'/course-catalog/'~industry.slug~'/' == post.permalink) ? '1' : '' %}
+            <li>
+                {% if current is empty %}
+                    <a href="{{ url }}/course-catalog/{{ industry.slug }}">
+                {% else %}
+                    {{ '[chevrons position="left" size="xs" color="blue"]'|shortcodes }}
+                {% endif %}
+                        Course Catalog
+                {% if current is empty %}
+                    </a>
+                {% endif %}
+            </li>
+        {% endif %}
+        {% if upcoming_seminars|length > 0 %}
+            {% set current = (url~'/upcoming-seminars/'~industry.slug~'/' == post.permalink) ? '1' : '' %}
+            <li>
+                {% if current is empty %}
+                    <a href="{{ url }}/upcoming-seminars/{{ industry.slug }}">
+                {% else %}
+                    {{ '[chevrons position="left" size="xs" color="blue"]'|shortcodes }}
+                {% endif %}
+                        Upcoming Seminars
+                {% if current is empty %}
+                    </a>
+                {% endif %}
+            </li>
+        {% endif %}
+        {% if testimonials|length > 0 %}
+            {% set current = (url~'/testimonials/'~industry.slug~'/' == post.permalink) ? '1' : '' %}
+            <li>
+                {% if current is empty %}
+                    <a href="{{ url }}/testimonials/{{ industry.slug }}">
+                {% else %}
+                    {{ '[chevrons position="left" size="xs" color="blue"]'|shortcodes }}
+                {% endif %}
+                    Testimonials
+                {% if current is empty %}
+                    </a>
+                {% endif %}
+            </li>
+        {% endif %}
+        {% if books_resources|length > 0 %}
+            {% set current = (url~'/books-resources/'~industry.slug~'/' == post.permalink) ? '1' : '' %}
+            <li>
+                {% if current is empty %}
+                    <a href="{{ url }}/books-resources/{{ industry.slug }}">
+                {% else %}
+                    {{ '[chevrons position="left" size="xs" color="blue"]'|shortcodes }}
+                {% endif %}
+                    Books &amp; Resources
+                {% if current is empty %}
+                    </a>
+                {% endif %}
+            </li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}

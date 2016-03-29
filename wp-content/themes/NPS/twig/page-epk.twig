@@ -1,0 +1,45 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with masthead %}
+        {% endembed %}
+    {% endif %}
+
+    {% embed 'layouts/two-column-right.twig' %}
+
+        {% block content %}
+
+            {% if masthead is empty %}
+                <h1>{{ post.title }}</h1>
+            {% endif %}
+
+            {% set post_content = post.content %}
+            {% if post_content %}
+                <div class="vertical-padding">
+                    {{ post_content }}
+                </div>
+            {% endif %}
+
+            {% set downloads = post.get_field('downloads') %}
+            {% if downloads %}
+                <div class="downloads-container">
+
+                    {% embed 'components/files.twig' with downloads %}
+                    {% endembed %}
+
+                </div>
+            {% endif %}
+
+        {% endblock %}
+
+        {% block sidebar %}
+            {{ sidebar }}
+            {{ promo_sidebar }}
+        {% endblock %}
+
+    {% endembed %}
+{% endblock %}

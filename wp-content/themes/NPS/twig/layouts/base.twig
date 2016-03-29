@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+{# BROWSERS #}
+{% set browser_list = '' %}
+{% for browser in browsers %}
+    {% set browser_list = browser_list~' '~browser %}
+{% endfor %}
+<html {{ site.language_attributes }} class="{{ browser_list }}" xmlns="http://www.w3.org/1999/xhtml" id="html-container">
+
+<head>
+
+<meta charset="{{ site.charset }}" />
+<title>{{ wp_title }}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<link rel="pingback" href="{{ site.pingback_url }}" />
+<meta name="base_url" content="{{ site.url }}" />
+<meta name="theme_url" content="{{ site.theme.uri }}" />
+<link rel="icon" type="image/png" href="{{ site.theme.uri }}/assets/production/images/icon.png">
+
+{{ wp_head }}
+
+{# CUSTOM PAGE HEAD #}
+{% block page_head %}
+{% endblock %}
+
+</head>
+
+{# VARS #}
+
+{% set body_classes = (extra_body_classes) ? post.slug ~ ' ' ~ extra_body_classes : post.slug  %}
+{% set is_logged_id = ( function('is_user_logged_in') ) ? 'id="logged-in"' : false %}
+
+{# VARS #}
+
+<body itemscope itemtype="http://schema.org/WebPage" {{ function('body_class', body_classes) }} role="document" {{ is_logged_id }}>
+
+{#GOOGLE ANALYTICS#}
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-57929540-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<header itemscope itemtype="http://schema.org/WPHeader">
+    <div class="header-nav-outer">
+        <div class="container">
+            <div class="row hidden-xs hidden-sm">
+                <div class="col-xs-12 clearfix">
+                    <div id="header-nav" itemscope itemtype="http://schema.org/SiteNavigationElement">
+                        {{ '[ubermenu config_id="header_config" menu="6"]'|shortcodes }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="primary-nav-outer">
+        <div class="container">
+            <div class="row primary-wrap">
+                <div class="col-xs-12 col-md-3 header-logo-container">
+                    <a href="{{ site.url }}" class="header-logo">
+                        <img class="logo-normal" src="{{ site.theme.uri }}/assets/production/images/logo.svg" data-fallback="{{ site.theme.uri }}/assets/production/images/logo.png" alt="No Pressure Selling"/>
+                        {#<img class="logo-mini" src="{{ site.theme.uri }}/assets/production/images/logo-mini.svg" data-fallback="{{ site.theme.uri }}/assets/production/images/logo-mini.png" alt="No Pressure Selling"/>#}
+                    </a>
+                </div>
+                <div class="col-xs-12 col-md-12 clearfix primary-nav-container">
+                    <div id="primary-nav" itemscope itemtype="http://schema.org/SiteNavigationElement">
+                        {{ '[ubermenu config_id="main" menu="7"]'|shortcodes }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="main-section">
+
+    {% block page_body %}
+
+    {# PAGE BODY GOES HERE #}
+
+    {% endblock %}
+
+</section>
+
+<footer role="contentinfo" itemscope itemtype="http://schema.org/WPFooter">
+    <div class="footer-container container">
+        <div class="row">
+            <div class="industries col-xs-12 col-sm-4 col-md-3">
+                <h3>Industries</h3>
+                <ul class="link-list">
+                    {% for item in home_industry_dropdown %}
+                        <li><a href="{{ item.page }}">{{ item.industry.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="page-links col-xs-12 col-sm-8 col-md-5">
+                <nav id="footer-nav" itemscope itemtype="http://schema.org/SiteNavigationElement">
+                    {% set page_list = footer_nav.get_items %}
+                    {% set split = (page_list|length) / 2 %}
+                    {% for list in footer_nav.get_items|batch(split) %}
+                        <ul class="link-list page-list">
+                            {% for item in list %}
+                                <li class="nav-main-item {{item.classes | join(' ')}}">
+                                    <a class="nav-main-link" href="{{item.get_link}}" {{ (item.target == '_blank' ? 'target="_blank"') }}>{{item.title}}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
+                </nav>
+            </div>
+            <div class="contact-form col-xs-12 col-md-4">
+                <h2>Questions?</h2>
+                <div class="title">Call us! <a href="tel:{{ site_info.phone_number }}">{{ site_info.phone_number }}</a></div>
+                <div class="desc">
+                    <div>
+                        <strong>Stay Connected!</strong>
+                    </div>
+                    <div>Sign up for our email newsletter</div>
+                </div>
+                <div class="newsletter-form">
+                    <form accept-charset="UTF-8" action="https://ii136.infusionsoft.com/app/form/process/5a077a5fc8590e5dae82efe52ff92b6d" class="infusion-form" method="POST">
+                        <input name="inf_form_xid" type="hidden" value="5a077a5fc8590e5dae82efe52ff92b6d" />
+                        <input name="inf_form_name" type="hidden" value="Email Newsletter" />
+                        <input name="infusionsoft_version" type="hidden" value="1.39.0.28" />
+                        <div class="infusion-field">
+                            <label for="inf_field_FirstName">First Name *</label>
+                            <input class="infusion-field-input-container" id="inf_field_FirstName" name="inf_field_FirstName" type="text" />
+                        </div>
+                        <div class="infusion-field">
+                            <label for="inf_field_LastName">Last Name *</label>
+                            <input class="infusion-field-input-container" id="inf_field_LastName" name="inf_field_LastName" type="text" />
+                        </div>
+                        <div class="infusion-field">
+                            <label for="inf_field_Email">Email *</label>
+                            <input class="infusion-field-input-container" id="inf_field_Email" name="inf_field_Email" type="text" />
+                        </div>
+                        <div class="infusion-submit">
+                            <input type="submit" value="Submit" />
+                        </div>
+                    </form>
+                    <script type="text/javascript" src="https://ii136.infusionsoft.com/app/webTracking/getTrackingCode?trackingId=c0dbcfeae979fb571da47434035cd7bc"></script>
+                </div>
+            </div>
+        </div>
+        <div class="row footer-address-container">
+            <div class="col-xs-12 col-md-9">
+                <div class="footer-address" itemscope itemtype="http://schema.org/LocalBusiness">
+                    <span itemprop="name">The ACT Group, Inc.</span> &copy;.
+                    <span itemprop="streetAddress">{{ site_info.address[0].address_1 }}</span>
+                    <span itemprop="addressLocality">{{ site_info.address[0].city }}</span>,
+                    <span itemprop="addressRegion">{{ site_info.address[0].state }}</span>
+                    <span>{{ site_info.address[0].zip }}</span>
+                    <a class="phone-link" href="tel:{{ site_info.phone_number }}" itemprop="telephone">{{ site_info.phone_number }}</a>
+                </div>
+                <span class="visible-md-inline visible-lg-inline">|</span><a class="privacy-policy" href="{{ site.url }}/privacy-policy">Privacy Policy</a>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="visible-xs visible-sm bottom-padding"></div>
+                <div class="zz-link">Site Design by <a href="http://www.zionandzion.com">Zion &amp; Zion</a></div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+{# MODAL #}
+{% embed 'components/modal.twig' %}
+{% endembed %}
+
+
+{{ wp_footer }}
+
+</body>
+</html>

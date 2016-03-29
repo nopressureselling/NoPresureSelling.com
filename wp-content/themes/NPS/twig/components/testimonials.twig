@@ -1,0 +1,46 @@
+{#
+
+VARS
+----
+background_img : string - background image src
+testimonials : object
+        -> content : string - item content
+        -> name : string - item name
+        -> company : string - item company
+
+more_btn ->
+    industry : string - current industry
+
+#}
+<div class="component testimonials" style="background-image: url('{{ (background_img) ? background_img : site.theme.uri~'/assets/production/images/default-testimonial-bg.jpg' }}')">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 col-md-6 quote-icon"><img data-img="svg" src="{{ site.theme.uri }}/assets/production/images/quotes.svg" data-fallback="{{ site.theme.uri }}/assets/production/images/quotes.png" /></div>
+            <div class="col-xs-12 col-sm-9 col-md-6">
+                {% for key, item in testimonials %}
+                    {% set active = (key == 0) ? ' active' %}
+                    <table class="item{{ active }}" data-slide="{{ key+1 }}">
+                        <tr>
+                            <td>
+                                <div class="content">{{ item.content|limit(300) }}</div>
+                                <div class="name">{{ item.name }}</div>
+                                <div class="company">{{ item.company }}</div>
+                            </td>
+                        </tr>
+                    </table>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if more_btn == true %}
+        <div class="row">
+                <div class="col-xs-12 read-all text-right">
+                    <a href="{{ url }}/testimonials/{{ industry.slug }}/" class="btn btn-lt-grey">
+                        <span class="text">More Testimonials</span>
+                        {{ '[chevrons size="xs"]'|shortcodes }}
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

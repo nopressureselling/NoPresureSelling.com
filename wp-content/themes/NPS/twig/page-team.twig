@@ -1,0 +1,59 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with { background_img : masthead['image'], text : masthead['text'] } %}
+        {% endembed %}
+    {% endif %}
+
+    {% embed 'layouts/two-column-right.twig' %}
+        {% block content %}
+
+            {% if masthead is empty %}
+                <h1>{{ post.title }}</h1>
+            {% endif %}
+
+            <ul class="team-members">
+                {% for member in members %}
+                    <li class="team-member">
+                        <div class="row">
+                            {% set thumbnail = member.get_field('thumbnail')%}
+                            {% if thumbnail %}
+                                <div class="thumb-container col-xs-12 col-sm-3">
+                                    <a href="{{ member.get_permalink }}">
+                                        <img src="{{ TimberImage(thumbnail.id)|resize(250, 150) }}" class="img-responsive" alt="{{ member.title }}"/>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            {% set info_classes = (thumbnail) ? 'col-sm-9' %}
+                            <div class="{{ (thumbnail) ? 'with-thumb' }} info-wrap col-xs-12 {{ info_classes }}">
+                                <div class="name-container">
+                                    <h3 class="member-name"><a href="{{ member.get_permalink }}">{{ member.title }}</a></h3>
+                                    <div class="member-position">{{ member.position }}</div>
+                                </div>
+
+                                <hr/>
+
+                                <div class="content">
+                                    <p>{{ member.excerpt|truncate(50) }}</p>
+                                </div>
+                                <div class="read-more-container">
+                                    <a class="read-bio btn btn-blue color-white" href="{{ member.get_permalink }}">Read full bio{{ '[chevrons]'|shortcodes }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        {% endblock %}
+
+        {% block sidebar %}
+            {{ sidebar }}
+            {{ promo_sidebar }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{
+  "name": "animate.css-less",
+  "version": "0.0.2",
+  "authors": [
+    "不会飞的羊<774070635@qq.com>"
+  ],
+  "keywords": [
+    "animate",
+    "less"
+  ],
+  "license": "MIT",
+  "homepage": "sadne.me",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "0.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.2",
+    "commit": "8509d70c74770fa9687836de82067429b0220f1f"
+  },
+  "_source": "git://github.com/sadne/animate.css-less.git",
+  "_target": "~0.0.2",
+  "_originalSource": "animate.css-less",
+  "_direct": true
+}

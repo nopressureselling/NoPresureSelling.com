@@ -1,0 +1,82 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with { background_img : masthead['image'], text : masthead['text'] } %}
+        {% endembed %}
+    {% endif %}
+
+    {# CONTENT #}
+    {% embed 'layouts/two-column-right.twig' %}
+        {% block content %}
+            {% if masthead is empty %}
+                <h1>{{ post.title }}</h1>
+            {% endif %}
+
+            {# LOGOS #}
+            {% if logos %}
+                <h2 class="logo-headline">A few of our happy {{ industry.name }} clients.</h2>
+                {% set hash = [] %}
+                {% for logo in logos %}
+                    {% set hash = hash|merge([{ title : logo.post_title, img_src : function('get_field', 'logo', logo.ID).url }]) %}
+                {% endfor %}
+                {% embed 'components/logos.twig' with { logos: hash } %}
+                {% endembed %}
+            {% endif %}
+
+            {# TESTIMONIALS #}
+            <div class="testimonials">
+            {% for testimonial in testimonials %}
+                {% set is_featured = testimonial.featured %}
+                <div class="testimonial container-fluid {{ ( is_featured ) ? 'featured' }}">
+                    <div class="row">
+                        <div class="quotes col-xs-12 col-sm-1 col-md-2 col-lg-1">
+                            <img data-img="svg" src="{{ site.theme.uri }}/assets/production/images/quotes.svg" data-fallback="{{ site.theme.uri }}/assets/production/images/quotes.png" />
+                        </div>
+                        {% set is_video = testimonial.video_testimonial %}
+                        {% if is_video %}
+                            <div class="video col-sm-2 col-md-3 col-lg-3">
+                                {% embed 'components/video-thumbnail.twig' with { color: ( is_featured ) ? 'white' : 'blue', vimeo_id : testimonial.get_field('vimeo_id'), img_src : TimberImage(testimonial.get_field('thumbnail').url), vimeo_title : testimonial.get_field('vimeo_title') } %}
+                                {% endembed %}
+                            </div>
+                        {% endif %}
+                        {% set content_width = ( is_video ) ? 'col-sm-9 col-md-7 col-lg-8' : 'col-sm-11 col-md-10' %}
+                        <div class="text-container {{ content_width }}">
+                            <div class="text">
+                                {{ testimonial.get_field('content') | truncate(300, true) }}
+                            </div>
+                            <div class="name">
+                                {{ testimonial.name }}
+                            </div>
+                            <div class="company">
+                                {{ testimonial.company }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+
+            {% if pages %}
+                {% import "macros/pagination.twig" as pagination %}
+                {{ pagination.build_nav(pages) }}
+            {% endif %}
+        {% endblock %}
+
+        {% block sidebar %}
+            {{ sidebar }}
+            {{ promo_sidebar }}
+        {% endblock %}
+    {% endembed %}
+
+    {{ promo_banner }}
+{% endblock %}
+
+{# MODAL FOR VIDEOS #}
+{% block modal %}
+    {% embed 'components/modal.twig' %}
+    {% endembed %}
+{% endblock %}

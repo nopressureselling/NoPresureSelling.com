@@ -1,0 +1,43 @@
+{#
+
+VARS
+----
+downloads : object
+        -> file : object
+        -> label : string
+
+#}
+
+<div class="component files">
+    <table class="table table-striped table-bordered">
+
+        {% for download in downloads %}
+
+            {% set icon = true %}
+            {% if download.file.mime_type == 'application/msword' %}
+                {% set icon = 'icon-file-word' %}
+            {% elseif download.file.mime_type == 'application/pdf' %}
+                {% set icon = 'icon-file-pdf' %}
+            {% else %}
+                {% set icon = 'icon-image' %}
+            {% endif %}
+
+            <tr>
+                <td class="icon-section">
+                    <a href="{{ download.file.url }}" target="_blank">
+                        <span class="icomoon file-icon {{ icon }}"></span>
+                    </a>
+                </td>
+                <td class="label-section">
+                    <a href="{{ download.file.url }}" target="_blank">
+                        <span>{{ download.label }}</span>
+                    </a>
+                </td>
+                <td class="view-section">
+                    <a class="btn btn-blue" href="{{ download.file.url }}" target="_blank">View {{ '[chevrons]'|shortcodes }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+</div>

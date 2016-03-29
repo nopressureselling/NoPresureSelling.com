@@ -1,0 +1,56 @@
+{# Schema compliant address #}
+<ul itemscope itemtype="http://schema.org/Place" class="address">
+	{% if address %}
+		<li>
+			<dl>
+				<dt>Address:</dt>
+				<dd itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+					{% if address.street %}
+						<span itemprop="streetAddress">
+						{{ address.street }}
+					</span>
+					{% endif %}
+					{% if address.locality %}
+						<span itemprop="addressLocality">
+						{{ address.locality -}}{{ address.state ? '' : ',' }}
+					</span>
+					{% endif %}
+					{% if address.region %}
+						<span itemprop="addressRegion">
+					{{ address.region }}
+					</span>
+					{% endif %}
+					{% if address.postalcode %}
+						<span itemprop="postalCode">
+						{{ address.postalcode }}
+					</span>
+					{% endif %}
+				</dd>
+			</dl>
+		</li>
+	{% endif %}
+
+	{% if address.telephone %}
+		<li>
+			<dl>
+				<dt>Contact:</dt>
+				<dd itemprop="telephone">
+					{{ address.telephone }}
+				</dd>
+			</dl>
+		</li>
+	{% endif %}
+
+	{% if address.hours %}
+		<li>
+			<dl>
+				<dt>Hours:</dt>
+				<dd>
+				{% for day in address.hours %}
+					{{ day }}: <time>{{ day.open }} - {{ day.close }}</time><br>
+				{% endfor %}
+				</dd>
+			</dl>
+		</li>
+	{% endif %}
+</ul>

@@ -1,0 +1,28 @@
+<div id="sidebar-promotion" class="component promotion-container sidebar" role="complementary" itemscope itemtype="http://schema.org/SiteNavigationElement">
+    <div class="promo">
+        <h3>{{ promo.headline }}</h3>
+        {% if promo.image %}
+            <div class="image hidden-xs hidden-sm">
+                <img src="{{ promo.image.url }}" />
+            </div>
+        {% endif %}
+        <div class="content">
+            {{ promo.content }}
+        </div>
+        <div class="btn-container">
+            {% set type_of_link = promo.type_of_link %}
+            {% if type_of_link == 'page' %}
+                <a href="{{ promo.link }}" {{ (promo.link_target) ? 'target="_blank"' }} class="btn btn-blue">
+                    <span class="btn-text">{{ promo.button_text }}</span>
+                    {{ '[chevrons size="sm"]'|shortcodes }}
+                </a>
+            {% else %}
+                <div class="promo-form-btn btn btn-blue" data-title="{{ promo.form_title }}">
+                    <span class="btn-text">{{ promo.button_text }}</span>
+                    {{ '[chevrons size="sm"]'|shortcodes }}
+                </div>
+                <div class="hidden-form hidden">{{ promo.form }}</div>
+            {% endif %}
+        </div>
+    </div>
+</div>

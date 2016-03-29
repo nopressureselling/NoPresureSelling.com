@@ -1,0 +1,82 @@
+body.news,
+body.releases {
+
+  @media only screen {
+    article .row {
+      border: 1px solid @ltst-grey;
+      .horizontal-padding(15px);
+      position: inherit;
+      .vertical-margin;
+      .vertical-padding(30px);
+
+      &.featured-post {
+        .background-dk-blue;
+        .color-white;
+
+        h2 { .color-white; }
+        p { .font-weight(100, 0); }
+
+//        .video-circle { .video-icon(@white, @dk-blue, @dk-blue)}
+      }
+
+      .video-container {
+        display: inline-block;
+        position: relative;
+      }
+
+      .img-responsive { margin: 0; }
+
+      .video-circle { .video-icon(@lt-green, @white, @white)}
+
+      h2 {
+        .color-blue;
+        .font-3;
+        margin-top: 15px;
+      }
+
+      .col-xs-11 {
+        display: table-cell;
+        float: none;
+      }
+
+      .chevron-container {
+        display: table-cell;
+        float: none;
+        vertical-align: middle;
+      }
+    }
+
+  }
+
+  @media only screen and (min-width: @screen-sm-min) {
+    article .row {
+      position: relative;
+
+      h2 { .no-top-margin; }
+
+      .col-xs-11 {
+        display: inline;
+        float: left;
+      }
+
+      .chevron-container {
+        display: inline;
+        float: left;
+        position: absolute;
+        bottom: 50%;
+        right: 0;
+        width: auto;
+      }
+    }
+  }
+
+  @media only screen and (min-width: @screen-md-min) {
+    article .row {
+      .img-responsive { margin: 0; }
+    }
+  }
+
+  @media only screen and (min-width: @screen-lg-min) {
+
+  }
+}

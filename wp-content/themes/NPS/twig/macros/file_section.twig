@@ -1,0 +1,25 @@
+{% macro files(downloads) %}
+    <section>
+        <div class="row text-center">
+            {% for download in downloads %}
+                <div class="col-xs-6 col-sm-4 col-md-3">
+                    <a href="{{ download.file.url }}" class="file-icon-container">
+                        {% set icon = true %}
+                        {% if download.file.mime_type == 'application/msword' %}
+                            {% set icon = 'icon-file-word' %}
+                        {% elseif download.file.mime_type == 'application/pdf' %}
+                            {% set icon = 'icon-file-pdf' %}
+                        {% else %}
+                            {% set icon = 'icon-image' %}
+                        {% endif %}
+
+                        <div class="icon">
+                            <span class="icomoon file-icon {{ icon }}"></span>
+                        </div>
+                        <div class="icon-label">{{ download.label }}</div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endmacro %}

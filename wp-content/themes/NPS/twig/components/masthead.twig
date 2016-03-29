@@ -1,0 +1,31 @@
+{#
+
+VARS
+----
+image : string - background image src
+text : string - masthead text
+particle_offset_top : string - how much left positioning to give the particle element
+particle_offset_left : string - how much top positioning to give the particle element
+
+#}
+
+{% set image = masthead.image %}
+{% set text = masthead.text %}
+{% set allow_particle = masthead.particle_effect %}
+{% set particle_offset_top = masthead.particle_offset_top %}
+{% set particle_offset_left = masthead.particle_offset_left %}
+
+<div class="component masthead" style="background-image: url('{{ image }}')" data-url="{{ image }}">
+    {% if allow_particle %}
+        <div id="particle" data-offset-top="{{ particle_offset_top }}" data-offset-left="{{ particle_offset_left }}"></div>
+    {% endif %}
+    <div class="container">
+        <table class="text-container">
+            <tr>
+                <td>
+                    <h2 class="masthead-text">{{ text }}</h2>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

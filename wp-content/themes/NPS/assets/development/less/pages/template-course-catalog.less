@@ -1,0 +1,93 @@
+body {
+  &.page-template-template-course-catalog {
+
+    &.home-improvement,
+    &.hvac,
+    &.auto,
+    &.solar {
+
+      @media only screen {
+
+        ul {
+          padding-left: 0;
+
+          .course {
+            border-top: 1px solid @lt-green;
+            list-style: none;
+            .vertical-padding;
+          }
+
+          .title-container { .vertical-padding; }
+
+          .course-title {
+            color: @blue;
+            .font-3;
+            margin: 0;
+          }
+
+          .links {
+            .see-details {
+              float: right;
+            }
+          }
+        }
+      }
+    }
+
+
+    @media only screen and (min-width: @screen-sm-min) {
+
+    }
+
+    @media only screen and (min-width: @screen-md-min) {
+
+    }
+
+    @media only screen and (min-width: @screen-lg-min) {
+
+    }
+  }
+
+  &.single-course {
+
+    @media only screen {
+
+      article.col-md-8 {
+        width: 100%;
+        right: 0
+      }
+
+      aside.col-md-4 { display: none; }
+
+      .seminar-section { .top-margin; }
+
+      .seminars {
+        padding-left: 0;
+
+        .seminar {
+          border-top: 1px solid @lt-green;
+          list-style: none;
+          .top-padding;
+          .top-margin;
+
+          .seminar-title { .font-3; }
+          .row { padding-bottom: 5px; }
+
+          .seminar-location {
+            color: @blue;
+            font-weight: bold;
+          }
+
+          .content { margin-top: 5px; }
+        }
+
+        .links {
+          bottom-margin: 5px;
+          text-align: right;
+        }
+      }
+
+      .back-button { margin-bottom: 20px; }
+    }
+  }
+}

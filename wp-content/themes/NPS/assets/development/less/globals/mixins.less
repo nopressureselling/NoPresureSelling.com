@@ -1,0 +1,133 @@
+.font-size(@font:14px,@line:@line-height-base){
+  font-size: @font;
+  line-height: @line;
+}
+
+.font-weight(@weight:inherit,@letter-spacing:0){
+  font-weight: @weight;
+  letter-spacing: @letter-spacing;
+}
+
+.inline(@vertical-align:top){//TOP, MIDDLE, BOTTOM
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+  vertical-align: @vertical-align;
+}
+
+.rgb-bg(@color, @opacity:1.0){
+  background: rgb(red(@color), green(@color), blue(@color)); //FALLBACK
+  background: rgba(red(@color), green(@color), blue(@color), @opacity);
+}
+
+.phone-link(@color: @black){
+  text-decoration: none !important;
+  color: @color;
+  cursor: default !important;
+
+  &:hover{
+    color: @color !important;
+  }
+}
+
+.hover-link(@color:@blue,@text_dec:none){
+
+  .lh-transition(color .3s ease);
+
+  &:hover{
+    color: @color;
+    text-decoration: @text_dec;
+  }
+}
+
+.hover-bg(@color:@lt-blue,@text_dec:none){
+
+  .lh-transition(background .3s ease);
+
+  &:hover{
+    background: @color;
+  }
+}
+
+.text-gradient(@color1, @color2){//WEBKIT ONLY
+  color: @color2;//FALLBACK
+  background: -webkit-linear-gradient(@color1, @color2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.padding(@padding:15px){
+  padding: @padding;
+}
+
+.vertical-padding(@padding:15px){
+  padding-top: @padding;
+  padding-bottom: @padding;
+}
+
+.horizontal-padding(@padding:15px){
+  padding-left: @padding;
+  padding-right: @padding;
+}
+
+.vertical-margin(@margin:15px){
+  margin-top: @margin;
+  margin-bottom: @margin;
+}
+
+.horizontal-margin(@margin:15px){
+  margin-left: @margin;
+  margin-right: @margin;
+}
+
+.vertical-padding{
+  .vertical-padding;
+}
+
+.horizontal-padding{
+  .horizontal-padding;
+}
+
+.vertical-margin{
+  .vertical-margin;
+}
+
+.horizontal-margin{
+  .horizontal-margin;
+}
+
+.top-margin{
+  margin-top: 15px;
+}
+
+.top-padding{
+  padding-top: 15px;
+}
+
+.bottom-margin{
+  margin-bottom: 15px;
+}
+
+.bottom-padding{
+  padding-bottom: 15px;
+}
+
+.no-top-margin{
+  margin-top: 0;
+}
+
+.clear{
+  clear: both;
+}
+
+.invisible-transition{
+  visibility: hidden;
+  .lh-opacity(0);
+  .lh-transition(visibility 0s linear .2s, opacity .2s linear);
+}
+
+.visible-transition{
+  visibility: visible;
+  .lh-opacity(1);
+  .lh-transition(visibility 0s linear, opacity .2s linear);
+}

@@ -1,0 +1,51 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with { background_img : masthead['image'], text : masthead['text'] } %}
+        {% endembed %}
+    {% endif %}
+
+    {# CONTENT #}
+    {% embed 'layouts/two-column-right.twig' %}
+        {% block content %}
+            {% if masthead is empty %}
+                <h1>{{ post.title }}</h1>
+            {% endif %}
+
+            {{ post.content }}
+
+            <ul class="industries">
+                {% for industry in industries %}
+                    <li class="industry">
+                        <h3 class="title">
+                            {{ industry.name }} Industry
+                        </h3>
+                        <div class="description">
+                            {{ industry.industry_description }}
+                        </div>
+                        {% if industry.page %}
+                            <div class="link">
+                                <a href="{{ industry.page }}" class="btn btn-lt-grey" >
+                                    View {{ industry.name }} Industry {{ '[chevrons size="xs"]'|shortcodes }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+
+        {% endblock %}
+
+        {% block sidebar %}
+            {{ sidebar }}
+            {{ promo_sidebar }}
+        {% endblock %}
+    {% endembed %}
+
+    {{ promo_banner }}
+
+{% endblock %}

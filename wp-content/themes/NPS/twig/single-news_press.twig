@@ -1,0 +1,29 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+    {% embed 'layouts/one-column.twig' %}
+        {% block content %}
+
+            <h1>{{ post.title }}</h1>
+            <div class="content">
+                {{ post.content }}
+            </div>
+
+            {% if post.get_field('gallery') %}
+                {% set ids = [] %}
+                {% for gallery in post.get_field('gallery') %}
+                    {% set ids = ids|merge([gallery.ID]) %}
+                {% endfor %}
+
+                {{ function('the_gallery', ids) }}
+            {% endif %}
+
+            {% import "macros/back_button.twig" as macro %}
+            {{ macro.build_button('View All '~post.type, back_link) }}
+
+        {% endblock %}
+    {% endembed %}
+
+    {{ promo_banner }}
+{% endblock %}

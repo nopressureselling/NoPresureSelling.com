@@ -1,0 +1,19 @@
+<div class="container">
+    {% if breadcrumbs %}
+        <div class="row breadcrumb-container">
+            <div class="col-xs-12">
+                {% import "macros/breadcrumbs.twig" as macro %}
+                {{ macro.build_breadcrumbs(breadcrumbs) }}
+            </div>
+        </div>
+    {% endif %}
+
+	<div class="row">
+		{# CONTENT #}
+        <article id="post-{{post.ID}}" class="post-type-{{post.post_type}} col-xs-12">
+            {% block content %}
+
+            {% endblock %}
+        </article>
+	</div>
+</div>

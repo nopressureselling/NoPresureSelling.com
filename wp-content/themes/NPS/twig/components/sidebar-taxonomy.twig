@@ -1,0 +1,39 @@
+{% if taxonomy|length > 0 %}
+<div id="sidebar" role="complementary" itemscope itemtype="http://schema.org/SiteNavigationElement">
+    <select class="visible-xs visible-sm{{ (data_target)?' ajaxy" data-target="'~data_target~'" no-history="true'}}" >
+        <option value="{{ url }}/{{ slug }}" {{ (current_taxon is empty)?'selected' }}>All Industries</option>
+        {% for taxon in taxonomy %}
+            {% set current = (current_taxon.slug == taxon.slug) ? ' class="current"' : '' %}
+            <option value="{{ url }}/{{ slug }}/{{ taxon.slug }}/" {{ (data_target)?'class="ajaxy" data-target="'~data_target~'" no-history="true"' }}>
+                {{ taxon.name }}
+            </option>
+        {% endfor %}
+    </select>
+    <ul class="hidden-xs hidden-sm">
+        <li>
+            {% if current_taxon or data_target %}
+            <a href="{{ url }}/{{ slug }}" {{ (data_target)?'class="ajaxy" data-target="'~data_target~'" data-callback="sidebarAjaxCallback" no-history="true"' }}>
+                {% if current_taxon is empty %}
+                    <span class="chevron">{{ '[chevrons position="left" size="xs"]'|shortcodes }}</span>
+                {% endif %}
+            {% endif %}
+                All Industries
+            {% if current_taxon or data_target %}
+            </a>
+            {% endif %}
+        </li>
+    {% for taxon in taxonomy %}
+        {% set current = (current_taxon.slug == taxon.slug) ? ' class="current"' %}
+        <li{{ current }}>
+            {% if current is empty %}
+            <a href="{{ url }}/{{ slug }}/{{ taxon.slug }}/" {{ (data_target)?'class="ajaxy" data-target="'~data_target~'" data-callback="sidebarAjaxCallback" no-history="true"' }}>
+            {% endif %}
+                {{ taxon.name }}
+            {% if current is empty %}
+            </a>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}

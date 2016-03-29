@@ -1,0 +1,36 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with { background_img : masthead['image'], text : masthead['text'] } %}
+        {% endembed %}
+    {% endif %}
+
+    {% embed 'layouts/two-column-right.twig' %}
+        {% block content %}
+
+            {% if masthead is empty %}
+                <h1>{{ post.title }}</h1>
+            {% endif %}
+
+            {{ post.content }}
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-push-2 col-xs-12 vertical-margin">
+                    {% for form in post.get_field('form') %}
+                        {{ function('do_shortcode', '[contact-form-7 id="'~form.ID~'"]') }}
+                    {% endfor %}
+                </div>
+            </div>
+
+        {% endblock %}
+
+        {% block sidebar %}
+            {{ sidebar }}
+            {{ promo_sidebar }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

@@ -1,0 +1,331 @@
+*:focus{
+  outline: none !important;
+}
+
+.main-section{
+  .roboto-slab;
+}
+
+h1,h2,h3,h4{
+  margin: 0;
+  line-height: 1.25em;
+}
+
+h1{
+  .font-5;
+  .color-blue;
+}
+h2{
+  .font-4;
+}
+h3{
+  .font-3;
+  .color-blue;
+}
+h4{
+  .font-2;
+}
+
+img{
+  max-width: 100%;
+}
+
+.form-control{
+  .lh-border-radius(0) !important;
+  .form-control-focus(@lt-green);
+}
+
+hr{
+  .vertical-margin;
+}
+
+//SELECTION
+@select-green: lighten(@lt-green, 20%);
+::selection {
+    background: @select-green; /* Safari */
+}
+::-moz-selection {
+    background: @select-green; /* Firefox */
+}
+
+//BUTTONS
+.btn{
+  .roboto;
+  border: 0 !important;
+  .lh-border-radius(0) !important;
+  &.submit-btn { width: 100%; }
+  &.btn-black{
+    .background-black;
+    .color-white;
+  }
+  &.btn-white{
+    .background-white;
+    .color-black;
+  }
+  &.btn-grey{
+    .background-grey;
+    .color-white;
+  }
+  &.btn-lt-grey{
+    .background-lt-grey;
+    .color-black;
+  }
+  &.btn-ltst-grey{
+    .background-ltst-grey;
+    .color-black;
+  }
+  &.btn-green{
+    .background-green;
+    .color-white;
+  }
+  &.btn-lt-green{
+    .background-lt-green;
+    .color-white;
+  }
+  &.btn-dk-blue{
+    .background-dk-blue;
+    .color-white;
+  }
+  &.btn-blue,
+  &.btn-default{
+    .background-blue;
+    .color-white;
+  }
+}
+
+//CHEVRONS
+
+.chevrons{
+  .inline(middle);
+  line-height: 0;
+
+  &.position-right { margin-left: 5px;}
+  &.position-left { margin-right: 5px;}
+
+  img{
+    .inline(middle);
+  }
+
+  &.position-down{
+    img{
+      .lh-rotate(90deg);
+    }
+  }
+  &.position-left{
+    img{
+      .lh-rotate(180deg);
+    }
+  }
+  &.position-up{
+    img{
+      .lh-rotate(270deg);
+    }
+  }
+
+  &.xs{
+    width: 15px;
+  }
+  &.sm{
+    width: 25px;
+  }
+  &.md{
+    width: 35px;
+  }
+  &.lg{
+    width: 45px;
+  }
+}
+
+
+// READ MORE JS
+a{
+  &[data-readmore-toggle]{
+    text-align: right;
+    .color-lt-green;
+    font-weight: 400;
+    margin: 0.5em 0;
+
+    &:visited{
+      .color-lt-green;
+    }
+  }
+}
+
+// BOOTSTRAP PAGINATION
+.pagination-nav {
+  text-align: center;
+}
+
+.pagination {
+  .page-numbers {
+
+    &.current {
+      a {
+        .color-white;
+        .background-blue;
+      }
+    }
+
+    a {
+      .color-blue;
+      font-weight: 600;
+    }
+  }
+}
+
+// BACK BUTTON
+.back-button{
+  text-transform: uppercase;
+  margin-top: 20px;
+}
+
+// ICOMOON ICONS
+.file-icon-container {
+  display: block;
+  margin-bottom: 8px;
+
+  &:hover, &:focus { text-decoration: none; }
+
+  .file-icon { .font-10; }
+}
+
+// BREADCRUMB
+
+ol.breadcrumb{
+  background: transparent;
+  .lh-border-radius(0);
+  padding: 15px 0 0;
+  .font-weight(100, 1px);
+
+  li{
+
+    a{
+      color: @lt-green;
+    }
+  }
+}
+
+//CF7
+//.main-section,
+//.modal-body{
+//  .wpcf7{
+//    label{
+//      font-weight: normal;
+//
+//      span{
+//        .color-pink;
+//      }
+//    }
+//
+//    input,
+//    textarea {
+//        padding: 5px 12px;
+//        font-size: 14px;
+//        line-height: 1.5;
+//        background: lighten(@ltst-gray,2%);
+//        border: 1px solid @gray;
+//        .lh-transition(all .2s ease);
+//        width: 100%;
+//    }
+//
+//    input:focus,
+//    textarea:focus {
+//        outline: none !important;
+//        border-color: @pink;
+//        outline: 0;
+//        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(213,56,154,.6);
+//        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(213,56,154,.6);
+//    }
+//
+//    input[type=checkbox]{
+//        border: 2px solid @white;
+//        width: 25px;
+//        height: 25px;
+//        background: @lt-gray;
+//        margin: 0 10px 0 0;
+//        -webkit-box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.25);
+//        box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.25);
+//        cursor: pointer;
+//        display: inline-block;
+//        outline: none !important;
+//        -webkit-appearance: none;
+//        -moz-appearance: none;
+//        appearance: none;
+//    }
+//
+//    input[type=radio]{
+//        border: 2px solid white;
+//        width: 25px;
+//        height: 25px;
+//        border-top-left-radius: 20px;
+//        border-top-right-radius: 20px;
+//        border-bottom-left-radius: 20px;
+//        border-bottom-right-radius: 20px;
+//        background: @lt-gray;
+//        margin: 0 10px 0 0;
+//        -webkit-box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.25);
+//        box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.25);
+//        cursor: pointer;
+//        display: inline-block;
+//        outline: none !important;
+//        -webkit-appearance: none;
+//        -moz-appearance: none;
+//        appearance: none;
+//    }
+//
+//    input[type=checkbox]:checked,
+//    input[type=radio]:checked{
+//        background: @pink url('http://www.zionandzion.com/wp-content/themes/ZandZ/assets/production/images/checkmark-white.png') center center no-repeat !important;
+//        background-size: 100% 100%;
+//    }
+//
+//    input[type=submit],
+//    input[type=button]{
+//      width: auto;
+//      cursor: pointer;
+//      .lh-transition(all .2s ease);
+//
+//      &:hover{
+//          background: @pink !important;
+//          color: @white;
+//      }
+//    }
+//
+//
+//    select{
+//        outline: none !important;
+//        height: 32px;
+//        background-color: lighten(@ltst-gray,2%);
+//        border: none;
+//        -webkit-border-radius: 0px;
+//        -moz-border-radius: 0px;
+//        border-radius: 0px;
+//        border-top: 2px solid #ddd;
+//    }
+//  }
+//}
+//.wpcf7-not-valid-tip{
+//  color: @pink !important;
+//  .font-weight(100) !important;
+//}
+//
+//.wpcf7-response-output{
+//  margin-top: 0 !important;
+//  margin-left: 0 !important;
+//  margin-right: 0 !important;
+//  padding: 5px !important;
+//  border: 0 !important;
+//  color: @white;
+//}
+//
+//.wpcf7-validation-errors{
+//  background: @pink !important;
+//}
+//
+//.wpcf7-validation-success{
+//  background: @pink !important;
+//}
+//
+//.wpcf7-mail-sent-ok{
+//  background: @green !important;
+//}

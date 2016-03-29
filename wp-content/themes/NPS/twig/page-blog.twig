@@ -1,0 +1,93 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with { background_img : masthead['image'], text : masthead['text'] } %}
+        {% endembed %}
+    {% endif %}
+
+
+    {# Content #}
+    {% embed 'layouts/two-column-right.twig' %}
+        {% block content %}
+
+            <div itemscope itemprop="mainContentOfPage" itemtype="http://schema.org/Blog">
+
+                {% if masthead is empty %}
+                    <h1>{{ post.title }}</h1>
+                {% endif %}
+    
+                {{ post.content }}
+
+                <ul>
+                    {% for featured in featured_post %}
+                        <li class="blog">
+                            <div class="row featured-post">
+                                {% if featured.gallery %}
+                                    <div class="col-md-3 col-sm-4 col-xs-12 text-center">
+                                        <div class="video-container">
+                                            <img src="{{ TimberImage(featured.gallery[0]).src }}" class="img-responsive {{ function('get_post_meta', blog.gallery["id"], 'video_url', true) ? 'video-img' : '' }}"/>
+                                            {% if function('get_post_meta', featured.gallery[0], 'video_url', true) %}
+                                                <div class="video-circle"></div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="col-md-{{ (featured.get_field('gallery'))? 8 : 11 }} col-sm-{{ (featured.get_field('gallery'))? 7 : 11 }} col-xs-12">
+                                    <div class="title"><a href="{{ url }}/blog/{{ featured.post_name }}">{{ featured.title }}</a></div>
+                                    <p>{{ featured.get_preview(100, false, '') }}</p>
+                                </div>
+                                <div class="col-sm-1 hidden-xs chevron-container">
+                                    <a href="{{ url }}/blog/{{ featured.post_name }}">
+                                        {{ '[chevrons color="blue" position="right" size="md"]'|shortcodes }}
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+
+                    {% for blog in blog_posts %}
+                        <li class="blog">
+                            <div class="row">
+                                {% if blog.gallery %}
+                                    <div class="col-md-3 col-sm-4 col-xs-12 text-center">
+                                        <div class="video-container">
+                                            <img src="{{ TimberImage(blog.gallery[0]).src }}" class="img-responsive {{ function('get_post_meta', blog.gallery["id"], 'video_url', true) ? 'video-img' : '' }}"/>
+                                            {% if function('get_post_meta', blog.gallery[0], 'video_url', true) != '' %}
+                                                <div class="video-circle"></div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="col-md-{{(blog.get_field('gallery'))? 8 : 11 }} col-sm-{{ (blog.get_field('gallery')) ? 7 : 11 }} col-xs-12">
+                                    <div class="title"><a href="{{ url }}/blog/{{ blog.post_name }}">{{ blog.title }}</a></div>
+                                    <p>{{ blog.get_preview(100, false, '') }}</p>
+                                </div>
+                                <div class="col-sm-1 hidden-xs chevron-container">
+                                    <a href="{{ url }}/blog/{{ blog.post_name }}">
+                                        {{ '[chevrons color="blue" position="right" size="md"]'|shortcodes }}
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {% if pages %}
+                    {% import "macros/pagination.twig" as pagination %}
+                    {{ pagination.build_nav(pages) }}
+                {% endif %}
+
+            </div>
+
+        {% endblock %}
+
+        {% block sidebar %}
+            {{ sidebar }}
+            {{ promo_sidebar }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

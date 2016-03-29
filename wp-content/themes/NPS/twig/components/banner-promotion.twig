@@ -1,0 +1,34 @@
+<div id="banner-promotion" class="component promotion-container banner">
+    <div class="container">
+        <div class="row">
+            {% if promo.banner_image %}
+            <div class="image hidden-xs col-sm-3 col-md-2">
+                <img src="{{ promo.banner_image.url }}" />
+            </div>
+            {% endif %}
+            <div class="promo col-xs-12 col-sm-{{ (promo.banner_image)?8:12 }} col-md-6 {{ (promo.banner_image)?'':'col-md-offset-1' }}">
+                <h3 class="headline">{{ promo.banner_headline }}</h3>
+
+                <div class="content">
+                    {{ promo.banner_content }}
+                </div>
+
+                <div class="btn-container">
+                    {% set type_of_link = promo.type_of_link_banner %}
+                    {% if type_of_link == 'page' %}
+                        <a href="{{ promo.banner_link }}" {{ (promo.banner_link_target) ? 'target="_blank"' }} class="btn btn-blue">
+                            <span class="btn-text">{{ promo.banner_button_text }}</span>
+                            {{ '[chevrons size="sm"]'|shortcodes }}
+                        </a>
+                    {% else %}
+                        <div class="promo-form-btn btn btn-blue" data-title="{{ promo.form_title_banner }}">
+                            <span class="btn-text">{{ promo.banner_button_text }}</span>
+                            {{ '[chevrons size="sm"]'|shortcodes }}
+                        </div>
+                        <div class="hidden-form hidden">{{ promo.form_banner }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

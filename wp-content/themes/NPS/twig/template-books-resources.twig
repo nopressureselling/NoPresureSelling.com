@@ -1,0 +1,70 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with masthead %}
+        {% endembed %}
+    {% endif %}
+
+    {# CONTENT #}
+    {% embed 'layouts/two-column-right.twig' %}
+        {% block content %}
+            {% if masthead is empty %}
+                <h1>{{ post.title }}</h1>
+            {% endif %}
+
+            {{ post.content }}
+
+            <div id="books-resources-container">
+                <div id="books-resources-results">
+                    {% for product in products %}
+                        <div class="row">
+                            {% set content_width = (product.get_field('thumbnail'))?7:9 %}
+                            {% if product.get_field('thumbnail') %}
+                                <div class="image col-sm-2 col-md-3 col-lg-2">
+                                    <img src="{{ TimberImage(product.get_field('thumbnail')).src|resize(200) }}" alt="{{ TimberImage(product.get_field('thumbnail')).title }}" />
+                                </div>
+                            {% endif %}
+                            <div class="title-description col-sm-{{ content_width }} col-md-{{ (product.get_field('thumbnail'))?content_width-1:content_width }} col-lg-{{ content_width }}">
+                                <div class="title">
+                                    {{ product.title }}
+                                </div>
+                                <div class="description read-more with-collapse">
+                                    {{ product.get_field('description') }}
+                                </div>
+                            </div>
+                            <div class="price-links col-sm-3">
+                                <div class="price">
+                                    ${{ product.price|number_format(2) }}
+                                </div>
+                                {% if product.buy_now_link %}
+                                    <a href="{{ product.buy_now_link }}" target="_blank">
+                                        <div class="btn btn-default">
+                                            Add To Cart {{ '[chevrons]'|shortcodes }}
+                                        </div>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    {% if pages %}
+                        {% set ajaxy = (data_target)?{data_target : data_target, no_history: 'false'}:false %}
+                        {% import "macros/pagination.twig" as pagination %}
+                        {{ pagination.build_nav(pages, ajaxy) }}
+                    {% endif %}
+                </div>
+            </div>
+        {% endblock %}
+
+        {% block sidebar %}
+            {{ sidebar }}
+            {{ promo_sidebar }}
+        {% endblock %}
+    {% endembed %}
+
+    {{ promo_banner }}
+{% endblock %}

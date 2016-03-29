@@ -1,0 +1,28 @@
+<div class="container">
+    {% if breadcrumbs %}
+        <div class="row breadcrumb-container">
+            <div class="col-xs-12">
+				{% import "macros/breadcrumbs.twig" as macro %}
+				{{ macro.build_breadcrumbs(breadcrumbs) }}
+            </div>
+        </div>
+    {% endif %}
+
+	<div class="row">
+
+		{# LEFT SIDEBAR #}
+		<aside id="sidebar" class="col-md-4 col-lg-3">
+            {% block sidebar %}
+
+            {% endblock %}
+		</aside>
+
+		{# CONTENT #}
+		<article class="col-md-8 col-lg-9">
+			{% block content %}
+
+			{% endblock %}
+		</article>
+
+	</div>
+</div>

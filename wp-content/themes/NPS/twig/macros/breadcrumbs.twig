@@ -1,0 +1,20 @@
+{#
+
+VARS
+----
+breadcrumbs     : array     - text for the button
+    label       : string    - required label for breadcrumb
+    permalink   : string    - optional permalink for breadcrumb
+
+#}
+{% macro build_breadcrumbs(breadcrumbs) %}
+<ol class="breadcrumb" itemprop="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+        <li{{ (loop.last)?' class="active"' }}>
+            {{ (breadcrumb.permalink) ? ' <a href="'~breadcrumb.permalink~'">' }}
+                {{ breadcrumb.label }}
+            {{ (breadcrumb.permalink) ? ' </a>' }}
+        </li>
+    {% endfor %}
+</ol>
+{% endmacro %}

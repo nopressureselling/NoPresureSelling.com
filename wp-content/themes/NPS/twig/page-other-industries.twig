@@ -1,0 +1,18 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with { background_img : masthead['image'], text : masthead['text'] } %}
+        {% endembed %}
+    {% endif %}
+
+    {# CONTENT #}
+    {% import "macros/sections.twig" as page %}
+    {{ page.build_sections(_context) }}
+
+    {{ promo_banner }}
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+    {% embed 'layouts/one-column.twig' %}
+        {% block content %}
+            <div class="content">
+                {{ post.content }}
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

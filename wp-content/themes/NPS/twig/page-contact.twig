@@ -1,0 +1,68 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with { background_img : masthead['image'], text : masthead['text'] } %}
+        {% endembed %}
+    {% endif %}
+
+    {% embed 'layouts/one-column.twig' %}
+        {% block content %}
+            {% if get.ty %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                          <strong>Thank you for your submission!</strong> We will be in touch shortly.
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="row">
+                {% set column_width = (post.infusionsoft_form)?6:12 %}
+                <div class="col-md-{{ column_width }} col-xs-12">
+                    {% if masthead is empty %}
+                        <h1>{{ post.title }}</h1>
+                    {% endif %}
+
+                    {{ post.content }}
+
+                    <div class="contact-info" itemscope itemtype="http://schema.org/LocalBusiness">
+                        <hr/>
+                        <div class="phone">
+                            Phone: <strong itemprop="telephone">{{ site_info.phone_number }}</strong>
+                        </div>
+                        <div class="fax">
+                            Fax: <strong itemprop="telephone">{{ site_info.fax_number }}</strong>
+                        </div>
+                        <div class="address">
+
+                            <span itemprop="streetAddress">{{ site_info.address[0].address_1 }}</span><br />
+                            {{ (site_info.address[0].address_2) ? '<span itemprop="streetAddress">'~site_info.address[0].address_2~'</span><br />' }}
+                            <span itemprop="addressLocality">{{ site_info.address[0].city }}</span>,
+                            <span itemprop="addressRegion">{{ site_info.address[0].state }}</span>
+                            <span>{{ site_info.address[0].zip }}</span>
+                        </div>
+                        <hr/>
+                        <p>
+                            Media - please contact us at <a href="mailto:media@nopressureselling.com?subject=Contact From Website" target="_blank">media@nopressureselling.com</a>
+                        </p>
+                    </div>
+                </div>
+
+                {% if post.infusionsoft_form %}
+                <div class="{{ (post.infusionsoft_form)?'infusionsoft-form ' }}col-md-{{ column_width }} col-xs-12">
+                    <hr class="visible-xs visible-sm"/>
+                    <h3 class="color-blue">Fill out the form below and we will contact you!</h3>
+                    <div class="form-container">
+                        {{ post.infusionsoft_form }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

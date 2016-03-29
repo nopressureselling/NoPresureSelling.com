@@ -1,0 +1,30 @@
+{% macro build_nav(pagination, ajaxy) %}
+
+    {% set ajaxy_string = (ajaxy)?'class="ajaxy" data-target="'~ajaxy.data_target~'" data-callback="'~ajaxy.data_callback~'" no-history="'~ajaxy.no_history~'"':'' %}
+
+    <section role="navigation">
+        <nav class="pagination-nav">
+            <ul class="pagination">
+                {% if pagination.pages and pagination.prev %}
+                    <li class="{{ pagination.prev.class }}"><a href="{{ pagination.prev.link }}" {{ ajaxy_string }}>
+                            {{ '[chevrons color="blue" position="left" size="xs"]'|shortcodes }} PREV</a>
+                    </li>
+                {% endif %}
+                {% for page in pagination.pages %}
+                    <li class="{{ page.class }}">
+                        <a href="{{ (page.link) ? page.link : 'javascript:void(0)' }}" {{ ajaxy_string }}>
+                            {{ page.title }}
+                        </a>
+                    </li>
+                {% endfor %}
+                {% if pagination.pages and pagination.next %}
+                    <li class="{{ pagination.next.class }}">
+                        <a href="{{ pagination.next.link }}" {{ ajaxy_string }}>
+                            NEXT {{ '[chevrons color="blue" position="right" size="xs"]'|shortcodes }}
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </section>
+{% endmacro %}

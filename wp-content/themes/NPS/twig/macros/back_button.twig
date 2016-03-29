@@ -1,0 +1,14 @@
+{#
+
+VARS
+----
+button_label    : string    - text for the button
+button_link     : string    - URL for the button
+
+#}
+
+{% macro build_button(button_label, button_link) %}
+    <a href="{{ button_link }}" class="back-button btn btn-default">
+        {{ '[chevrons size="sm" position="left"]'|shortcodes }} {{ button_label }}
+    </a>
+{% endmacro %}

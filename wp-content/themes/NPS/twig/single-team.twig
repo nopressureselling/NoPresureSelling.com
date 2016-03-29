@@ -1,0 +1,74 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {% embed 'layouts/one-column.twig' %}
+        {% block content %}
+
+            <div class="bio-container">
+
+                <div class="title-container">
+                    <h1>{{ post.post_title }}</h1>
+                    <div class="member-position">{{ post.position }}</div>
+                </div>
+
+                {% set sections = post.get_field('sections') %}
+                {% set i = 0 %}
+                {% for section in sections %}
+
+                    {# CONTENT #}
+                    {% if section['acf_fc_layout'] == 'content' %}
+                    {% set i = i + 1 %}
+
+                        <div class="vertical-padding clearfix">
+
+                            {% if i == 1 %}
+                                <div class="member-thumb">
+                                    <div class="wrap">
+                                        <img src="{{ TimberImage( post.get_field('thumbnail') ) }}" class="img-responsive"/>
+                                    </div>
+                                    <div class="thumb-title">{{ post.post_title }}</div>
+                                    <div class="thumb-position">{{ post.position }}</div>
+                                </div>
+                            {% endif %}
+
+                            {{ section.editor }}
+
+                        </div>
+
+                    {# GALLERY #}
+                    {% elseif section['acf_fc_layout'] == 'gallery' %}
+
+                        {% set ids = [] %}
+                        {% for gallery in section.gallery %}
+                            {% set ids = ids|merge([gallery.id]) %}
+                        {% endfor %}
+
+                        <div class="gallery-container">
+                            {{ function('the_gallery', ids) }}
+                        </div>
+
+                    {# DOWNLOADABLE FILES #}
+                    {% elseif section.acf_fc_layout == 'download_file' %}
+                        {% set downloads = section.download_repeater %}
+
+                        <h2 class="vertical-margin color-blue">Downloadable Files</h2>
+
+                        {% embed 'components/files.twig' with downloads %}
+                        {% endembed %}
+
+                    {% endif %}
+
+                {% endfor %}
+
+                {# BACK BTN #}
+                {% import "macros/back_button.twig" as macro %}
+                {{ macro.build_button('Our Team', back_link) }}
+
+            </div>
+
+        {% endblock %}
+    {% endembed %}
+
+{% endblock %}

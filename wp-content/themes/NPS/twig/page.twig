@@ -1,0 +1,31 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+
+    {# MASTHEAD #}
+    {% if masthead %}
+        {% embed 'components/masthead.twig' with { background_img : masthead['image'], text : masthead['text'] } %}
+        {% endembed %}
+    {% endif %}
+
+    {% embed 'layouts/two-column-right.twig' %}
+        {% block content %}
+
+            {% if masthead is empty %}
+                <h1>{{ post.title }}</h1>
+            {% endif %}
+
+            {# CONTENT #}
+            {{ post.content }}
+
+        {% endblock %}
+
+        {% block sidebar %}
+            {{ promo_sidebar }}
+        {% endblock %}
+    {% endembed %}
+
+    {{ promo_banner }}
+
+{% endblock %}

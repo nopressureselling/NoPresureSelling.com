@@ -1,0 +1,22 @@
+{#
+
+VARS
+----
+title : string - list title
+list : object
+        -> text : string - item text
+
+#}
+
+<div class="component big-list">
+    <h3 class="list-title">{{ title }}</h3>
+    <ul>
+        {% for key, item in list %}
+            <li>
+                <table class="item-content item-{{ key + 1 }}">
+                    <tr><td>{{ item.text }}</td></tr>
+                </table>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

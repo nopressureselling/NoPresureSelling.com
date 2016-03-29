@@ -1,0 +1,155 @@
+{#
+
+VARS
+----
+site                            : string    - used inside testimonials component
+sections                        : array
+    section rows                : array     - total sections to render
+        acf flexible content    : object    - actual acf object
+sidebar                         : object    - acf get_sidebar
+promo_sidebar                   : object    - acf get_sidebar
+full_width_sections             : array     - defined inside functions file
+industry                        : string    - current industry
+
+#}
+{% macro build_sections(context) %}
+    {% set site = context.site %}
+    {% set sections = context.sections %}
+    {% set sidebar = context.sidebar %}
+    {% set promo_sidebar = context.promo_sidebar %}
+    {% set full_width_sections = context.full_width_sections %}
+    {% set industry = context.industry %}
+
+    {% for rows in sections %}
+        {% set columns = 'two' %}
+        {% for section in rows %}
+            {% if section.acf_fc_layout in full_width_sections %}
+                {% set columns = 'full' %}
+            {% endif %}
+        {% endfor %}
+
+        {% if columns == 'two' %}
+            {# TWO COLUMN LAYOUT #}
+            {% set template_name = (sidebar or promo_sidebar)?'two-column-right':'one-column' %}
+            {% embed 'layouts/'~template_name~'.twig' %}
+
+                {% block content %}
+                    {% for section in rows %}
+
+                        {# CONTENT #}
+                        {% if section.acf_fc_layout == 'content' %}
+                            <div class="content vertical-padding">
+                                {{ section.editor }}
+                            </div>
+
+                        {# GALLERY #}
+                        {% elseif section.acf_fc_layout == 'gallery' %}
+                            {% set ids = [] %}
+                            {% for gallery in section.gallery %}
+                                {% set ids = ids|merge([gallery.id]) %}
+                            {% endfor %}
+
+                            <div class="vertical-padding">
+                                {{ function('the_gallery', ids) }}
+                            </div>
+
+                        {# LOGOS #}
+                        {% elseif section.acf_fc_layout == 'logos' %}
+                            {% set hash = [] %}
+                            {% for logo in section.logos %}
+                                {% set hash = hash|merge([{ title : logo.post_title, img_src : function('get_field', 'logo', logo.ID).url }]) %}
+                            {% endfor %}
+                            {% embed 'components/logos.twig' with { logos: hash } %}
+                            {% endembed %}
+
+                        {# VIDEOS #}
+                        {% elseif section.acf_fc_layout == 'videos' %}
+
+                            <div class="videos row">
+                                {% for key, video in section.videos %}
+                                    <div class="video-item-wrap {{ ( (key+1) is odd) ? 'odd' : 'even' }} col-xs-12 col-sm-6 col-md-12 col-lg-6">
+                                        <div class="video-item">
+                                            <div class="row">
+                                                <div class="image-container col-xs-12 col-sm-5 col-md-3 col-lg-5">
+                                                    {% embed 'components/video-thumbnail.twig' with { color: 'blue', vimeo_id : video.vimeo_id, img_src : TimberImage(video.thumbnail.url), vimeo_title : video.title } %}
+                                                    {% endembed %}
+                                                </div>
+                                                <div class="info-container col-xs-12 col-sm-7 col-md-9 col-lg-7">
+                                                    <div class="video-title title">{{ video.title }}</div>
+                                                    {% set desc = video.description %}
+                                                    {% if desc %}
+                                                        <div class="description">{{ desc }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                        {# DOWNLOADABLE FILES #}
+                        {% elseif section.acf_fc_layout == 'download_file' %}
+                            {% set downloads = section.download_repeater %}
+
+                            <h2 class="vertical-margin color-blue">Downloadable Files</h2>
+
+                            {% embed 'components/files.twig' with downloads %}
+                            {% endembed %}
+
+                        {% endif %}
+                    {% endfor %}
+                {% endblock %}
+
+                {% if sidebar or promo_sidebar %}
+                    {% block sidebar %}
+                        {% if content_singleton is empty %}
+                            {{ sidebar }}
+                            {{ promo_sidebar }}
+                        {% endif %}
+                    {% endblock %}
+                {% endif %}
+            {% endembed %}
+            {% set content_singleton = true %}
+        {% else %}
+
+            {# FULL WIDTH LAYOUT #}
+            {% for section in rows %}
+
+                {# TESTIMONIALS #}
+                {% if section.acf_fc_layout == 'testimonial' %}
+                    {% set hash = [] %}
+                    {% if section.custom_testimonial %}
+                        {% for t_item in section.quotes %}
+                            {% set hash = hash|merge([{ content : t_item.quote, name : t_item.name, company : t_item.company }]) %}
+                        {% endfor %}
+                    {% else %}
+                        {% for t_item in section.existing_testimonials %}
+                            {% set hash = hash|merge([{ content : t_item.content, name : t_item.name, company : t_item.company }]) %}
+                        {% endfor %}
+                    {% endif %}
+                    {% set has_industry = (industry) ? true %}
+
+                    {% embed 'components/testimonials.twig' with { more_btn : has_industry, background_img : section.background_image.url, testimonials : hash, industry : industry, url : site.url } %}
+                    {% endembed %}
+
+                {# BIG LIST #}
+                {% elseif section.acf_fc_layout == 'big_list' %}
+                    <div class="container">
+                        {% embed 'components/big-list.twig' with { title : section.title, list : section.list } %}
+                        {% endembed %}
+
+                        {% if(section.content) %}
+                            <div class="big-list-content">{{ section.content }}</div>
+                        {% endif %}
+
+                        {% if section.link %}
+                        <div class="big-list-link">
+                            <a href="{{ section.link }}">{{ section.link_text }} {{ '[chevrons size="sm" color="lt-green"]'|shortcodes }}</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

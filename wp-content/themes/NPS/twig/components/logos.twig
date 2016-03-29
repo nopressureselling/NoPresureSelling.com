@@ -1,0 +1,19 @@
+{#
+
+VARS
+----
+logos : object
+        -> title : string - logo title
+        -> img_src : string - logo src
+
+#}
+
+<div class="component logos">
+    <div class="logo-slider owl-carousel owl-theme">
+    {% for logo in logos %}
+        <div class="item">
+            <img src="{{ logo.img_src }}" alt="{{ logo.title }}" />
+        </div>
+    {% endfor %}
+    </div>
+</div>

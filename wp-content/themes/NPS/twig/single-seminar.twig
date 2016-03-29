@@ -1,0 +1,150 @@
+{% extends 'layouts/base.twig' %}
+
+{# PAGE BODY #}
+{% block page_body %}
+    {# CONTENT #}
+    {% embed 'layouts/one-column.twig' %}
+        {% block content %}
+            <div class="row">
+                {% set column_width = (post.infusionsoft_form)?7:12 %}
+                <div class="col-sm-{{ column_width }}">
+                    <div class="info row">
+                        <div class="date-title col-sm-7">
+                            <h1 class="title">
+                                {{ post.title }}
+                            </h1>
+                            <div class="date">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                <span class="text">{{ post.seminar_date|date('m-d-Y') }} {{ (post.seminar_end_date) ? ' - '~post.seminar_end_date|date('m-d-Y') }}</span>
+                            </div>
+                        </div>
+                        <div class="location col-sm-5">
+                            {% set location_name = post.location_name %}
+                            {% set location_city_state = post.location_city_state %}
+                            {% if location_name %}
+                                <div class="name">
+                                    {{ post.location_name }}
+                                </div>
+                            {% endif %}
+                            {% if location_city_state %}
+                                <div class="city-state">
+                                    {{ post.location_city_state }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <div class="content">
+                        {{ post.content }}
+                    </div>
+
+                    <hr/>
+
+                    {# INSTRUCTORS #}
+                    {% if instructors %}
+                    <div class="instructors">
+                        <h3>Instructor{{ (instructors|length > 1)?'s' }}</h3>
+                        {% for instructor in instructors %}
+                        <div class="row instructor">
+                            <div class="col-sm-4 thumb-container">
+                                {% set thumb = instructor.thumbnail %}
+                                {% if thumb %}
+                                    <div class="thumb">
+                                        <img src="{{ TimberImage(thumb) }}" alt="{{ TimberImage(instructor.thumbnail).title }}" />
+                                    </div>
+                                {% else %}
+                                    <img src="{{ site.theme.uri }}/assets/production/images/default-thumb.svg" data-fallback="{{ site.theme.uri }}/assets/production/images/default-thumb.png" alt="Instructor"/>
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="name color-blue">
+                                    {{ instructor.name }}
+                                </div>
+                                <div class="bio">
+                                    {{ instructor.permalink }}
+                                    {{ (instructor.permalink) ? instructor.bio|slice(0,100)~'&hellip; <a href="'~instructor.permalink~'">Read Full Bio</a>' : '<div class="read-more with-collapse">'~instructor.bio~'</div>' }}
+                                    {{ (instructor.permalink) ? '[chevrons size="xs" color="blue" position="right"]'|shortcodes }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <hr/>
+
+                    {% endif %}
+
+                    {# EVENT DETAILS #}
+                    <div class="event-location-container">
+                        <h3>Event Location &amp; Details</h3>
+                        <div class="time-location">
+                            {% set event_time = post.seminar_time %}
+                            {% set location = post.location_address %}
+                            {% if event_time %}
+                                <b>Event Time : </b>{{ event_time }}<br />
+                            {% endif %}
+                            {% if location %}
+                                <b>Location : </b><a href="https://maps.google.com?daddr={{ location.address|url_encode }}" target="_blank">{{ location.address }}</a>
+                            {% endif %}
+                        </div>
+
+                        {% if location %}
+                            <div class="map">
+                                <a href="https://maps.google.com?daddr={{ location.address|url_encode }}" target="_blank">
+                                    <img src="https://maps.googleapis.com/maps/api/staticmap?center={{ location.lat }},{{ location.lng }}&zoom=13&size=400x400&markers=color:red%7C{{ location.address|url_encode }}">
+                                    <div>Click For Directions</div>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {# DOWNLOADABLE FILES #}
+                    {% set downloads = post.get_field('download_repeater') %}
+                    {% if downloads %}
+                        <h3 class="topcolor-blue top-margin">Downloadable Files</h3>
+                        {% embed 'components/files.twig' with downloads %}
+                        {% endembed %}
+                    {% endif %}
+
+                </div>
+
+                {% if post.infusionsoft_form %}
+                <div class="col-sm-5 infusionsoft-form">
+                    <h4 class="color-blue">{{ post.infusionsoft_form_title }}</h4>
+                    {{ post.infusionsoft_form }}
+                </div>
+                {% endif %}
+            </div>
+
+            {% import "macros/back_button.twig" as macro %}
+            {# build_button(button_label, button_link) #}
+            {{ macro.build_button('Upcoming '~industry.slug~' Seminars', back_link) }}
+
+        {% endblock %}
+    {% endembed %}
+
+
+    {# TESTIMONIALS #}
+    {% set testimonials = post.get_field('testimonials')[0] %}
+    {% if testimonials %}
+
+        {% set hash = [] %}
+        {% if testimonials.custom_testimonial %}
+            {% for t_item in testimonials.quotes %}
+                {% set hash = hash|merge([{ content : t_item.quote, name : t_item.name, company : t_item.company }]) %}
+            {% endfor %}
+        {% else %}
+            {% for t_item in testimonials.existing_testimonials %}
+                {% set hash = hash|merge([{ content : function('get_field', 'content', t_item.ID), name : function('get_field', 'name', t_item.ID), company : function('get_field', 'company', t_item.ID) }]) %}
+            {% endfor %}
+        {% endif %}
+
+        {% embed 'components/testimonials.twig' with { background_img : section.testimonials_background_image.url, testimonials : hash } %}
+        {% endembed %}
+    {% endif %}
+
+    {{ promo_banner }}
+
+{% endblock %}

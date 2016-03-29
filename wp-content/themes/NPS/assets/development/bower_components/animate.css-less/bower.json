@@ -1,0 +1,20 @@
+{
+  "name": "animate.css-less",
+  "version": "0.0.1",
+  "authors": [
+    "不会飞的羊<774070635@qq.com>"
+  ],
+  "keywords": [
+    "animate",
+    "less"
+  ],
+  "license": "MIT",
+  "homepage": "sadne.me",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
