@@ -8,7 +8,7 @@ $context['post'] = $post;
 $sections = get_field('sections',$post->ID);
 
     // Check for industry cookie
-    $industry_id = ($_COOKIE['industry']) ? $_COOKIE['industry'] : 'default';
+    $industry_id = (isset($_COOKIE['industry'])) ? $_COOKIE['industry'] : 'default';
 
     // Cache default section
     global $default_section;
@@ -47,7 +47,7 @@ $context['masthead'] = array(
 // Promotion based on industry
 $promotions = get_field('industry_promotions', 'option');
 foreach ($promotions as $promotion){
-    if( $_COOKIE['industry'] ){
+    if( isset($_COOKIE['industry']) && $_COOKIE['industry'] !== false || $_COOKIE['industry'] !== null ) {
         if(isset($promotion['industry']->term_id) && $promotion['industry']->term_id == $_COOKIE['industry']){
             $context['promotion'] = $promotion;
         }
@@ -58,8 +58,10 @@ foreach ($promotions as $promotion){
     }
 }
 // Sidebar Promo
-$industry = get_term( $_COOKIE['industry'], 'industry');
-$context['industry'] = $industry;
+if (isset($_COOKIE['industry']) && $_COOKIE['industry'] !== false || $_COOKIE['industry'] !== null){
+	$industry = get_term( $_COOKIE['industry'], 'industry');
+	$context['industry'] = $industry;
+}
 include_once('sidebar-promotion.php');
 
 // Upcoming Seminars & News based on industry
