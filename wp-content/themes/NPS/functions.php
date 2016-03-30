@@ -160,13 +160,13 @@ class StarterSite extends TimberSite{
 	   	), $atts));
 
 		$output = '<img data-img="svg" src="'.get_bloginfo('template_url').'/assets/production/images/'.$src.'" data-fallback="'.get_bloginfo('template_url').'/assets/production/images/'.$fallback.'" ';
-		if($width){
+		if( isset($width) && is_string($width) ){
 			$output .= 'width="'.$width.'" ';
 		}
-		if($height){
+		if(isset($height) && is_string($height)){
 			$output .= 'height="'.$height.'" ';
 		}
-		if($class){
+		if(isset($class) && is_string($class)){
 			$output .= 'class="'.$class.'" ';
 		}
 		$output .= '/>';
@@ -229,7 +229,7 @@ class StarterSite extends TimberSite{
         $context['home_industry_dropdown'] = get_field('industry_dropdown', 2);
 
 		//TEST
-		if($_GET['test'] == 1){
+		if(isset($_GET['test']) && $_GET['test'] == 1){
 			$context['test'] = 1;
 		}
 

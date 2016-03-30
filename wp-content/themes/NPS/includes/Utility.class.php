@@ -5,7 +5,7 @@ class Utility {
     public $includes = "";
     public $html_classes = "";
 
-    public function __construct($form){
+    public function __construct($form = array()){
         $this->form = $form;
 
         if(file_exists(__DIR__.'/Browser.class.php')){
@@ -22,7 +22,7 @@ class Utility {
             array_push($this->warnings, "Couldn't find MobileDetect class in the same directory as the Utility class ".__FILE__." on line ".__LINE__);
         }
 
-        if($browser && $mobile){
+        if( isset($browser) && isset($mobile) ){
             $this->generate_classes($browser->getBrowser(), $browser->getPlatform(), $browser->getVersion(), $mobile->isMobile(), $mobile->isTablet());
         }
 
@@ -31,10 +31,25 @@ class Utility {
 
     // HELPER FUNCTIONS
     public function lc_words($str){
-        return preg_replace('#\b([a-z])#ie', "strtolower($1)", $str);
+
+		// search pattern
+	    $pattern = '#\b([a-z])#i';
+
+		// the function call
+	    $result = preg_replace_callback($pattern, array($this,'lc_words_cb'), $str);
+
+		return $result;
     }
 
-    public function update_form_elements($key, $val){
+	function lc_words_cb ( $matches ) {
+
+		$string = strtolower($matches[0]);
+
+		return $string;
+	}
+
+
+	public function update_form_elements($key, $val){
 
         $this->form[$key] = array(
             "type"		=>		"hidden",
@@ -130,7 +145,7 @@ GACODE;
      * the zzid if it exists
      */
     public function zzid(){
-        $zzid = $_GET['zzid'];
+        $zzid = isset($_GET['zzid']) ? esc_html( $_GET['zzid'] ) : false;
 
         if($zzid){
             if($_COOKIE['zzid'] != $zzid){
@@ -139,7 +154,7 @@ GACODE;
             $this->update_form_elements("zzid", $zzid);
             return $zzid;
         }else{
-            array_push($this->warnings, "Called zzid() and no ZZID parameter found via $_GET ".__FILE__." on line ".__LINE__);
+            array_push($this->warnings, "Called zzid() and no ZZID parameter found via \$_GET ".__FILE__." on line ".__LINE__);
         }
     }
 
@@ -269,6 +284,5 @@ CLICKTALE;
     }
 }
 
-$utility = new Utility($form);
+$utility = new Utility();
 $form = $utility->form;
-?>

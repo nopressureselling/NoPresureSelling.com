@@ -13,7 +13,7 @@ $sections = get_field('sections',$post->ID);
     // Cache default section
     global $default_section;
     foreach ($sections as $section) {
-        if (!$section['industry']->term_id) {
+        if (!isset($section['industry']->term_id)) {
             $default_section = $section;
             break;
         }
@@ -23,7 +23,7 @@ $sections = get_field('sections',$post->ID);
     global $term;
     $default = true;
     foreach ($sections as $section) {
-        if ($section['industry']->term_id == $industry_id){
+        if (isset($section['industry']->term_id) && $section['industry']->term_id == $industry_id){
             $context['section'] = $section;
             $term = get_term( $_COOKIE['industry'], 'industry')->slug;
             $default = false;
@@ -48,7 +48,7 @@ $context['masthead'] = array(
 $promotions = get_field('industry_promotions', 'option');
 foreach ($promotions as $promotion){
     if( $_COOKIE['industry'] ){
-        if($promotion['industry']->term_id == $_COOKIE['industry']){
+        if(isset($promotion['industry']->term_id) && $promotion['industry']->term_id == $_COOKIE['industry']){
             $context['promotion'] = $promotion;
         }
     }else{
