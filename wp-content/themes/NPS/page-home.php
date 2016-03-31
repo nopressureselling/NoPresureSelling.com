@@ -47,7 +47,7 @@ $context['masthead'] = array(
 // Promotion based on industry
 $promotions = get_field('industry_promotions', 'option');
 foreach ($promotions as $promotion){
-    if( isset($_COOKIE['industry']) && $_COOKIE['industry'] !== false || $_COOKIE['industry'] !== null ) {
+    if( isset($_COOKIE['industry']) && $_COOKIE['industry'] !== false && $_COOKIE['industry'] !== null ) {
         if(isset($promotion['industry']->term_id) && $promotion['industry']->term_id == $_COOKIE['industry']){
             $context['promotion'] = $promotion;
         }
@@ -58,7 +58,7 @@ foreach ($promotions as $promotion){
     }
 }
 // Sidebar Promo
-if (isset($_COOKIE['industry']) && $_COOKIE['industry'] !== false || $_COOKIE['industry'] !== null){
+if (isset($_COOKIE['industry']) && $_COOKIE['industry'] !== false && $_COOKIE['industry'] !== null){
 	$industry = get_term( $_COOKIE['industry'], 'industry');
 	$context['industry'] = $industry;
 }

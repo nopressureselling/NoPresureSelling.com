@@ -50,7 +50,7 @@ class StarterSite extends TimberSite{
             wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js", false, null);
             wp_enqueue_script('jquery');
 
-            wp_register_style('theme_styles', $this->assets . '/css/styles.min.css', false, 'all');
+            wp_register_style('theme_styles', get_template_directory_uri() . '/assets/production/css/styles.min.css', array(), false, 'all');
             wp_enqueue_style('theme_styles');
 
             wp_register_script('theme_scripts', $this->assets . '/js/scripts.min.js', false, null, true);
@@ -66,14 +66,18 @@ class StarterSite extends TimberSite{
 			'name' => 'logo.png'
 	   	), $atts));
 
-		$output = '<img src="'.get_bloginfo('template_url').'/assets/production/images/'.$name.'" ';
-		if($width){
+		if ( !isset($name) ){
+			return false;
+		}
+
+		$output = '<img src="'.get_template_directory_uri().'/assets/production/images/'.$name.'" ';
+		if(isset($width) && is_string($width)){
 			$output .= 'width="'.$width.'" ';
 		}
-		if($height){
+		if(isset($height) && is_string($height)){
 			$output .= 'height="'.$height.'" ';
 		}
-		if($class){
+		if(isset($class) && is_string($class)){
 			$output .= 'class="'.$class.'" ';
 		}
 		$output .= '/>';
@@ -159,7 +163,17 @@ class StarterSite extends TimberSite{
 			'fallback' => 'logo.png'
 	   	), $atts));
 
-		$output = '<img data-img="svg" src="'.get_bloginfo('template_url').'/assets/production/images/'.$src.'" data-fallback="'.get_bloginfo('template_url').'/assets/production/images/'.$fallback.'" ';
+		if ( !isset($src) ){
+			return false;
+		}
+
+		if ( isset($fallback) ){
+			$fallback = "data-fallback=".get_template_directory_uri()."/assets/production/images/".$fallback;
+		} else {
+			$fallback = '';
+		}
+
+		$output = '<img data-img="svg" src="'.get_template_directory_uri().'/assets/production/images/'.$src.'" '. $fallback;
 		if( isset($width) && is_string($width) ){
 			$output .= 'width="'.$width.'" ';
 		}
@@ -182,14 +196,14 @@ class StarterSite extends TimberSite{
 			'size' => 'xs'
 		), $atts );
 
-		return '<div class="chevrons position-'.$a['position'].' '.$a['size'].'"><img data-img="svg" src="'.get_bloginfo('template_url').'/assets/production/images/chevrons/chevron-'.$a['color'].'.svg" data-fallback="'.get_bloginfo('template_url').'/assets/production/images/chevrons/chevron-'.$a['color'].'.png" alt=">>"/></div>';
+		return '<div class="chevrons position-'.$a['position'].' '.$a['size'].'"><img data-img="svg" src="'.get_template_directory_uri().'/assets/production/images/chevrons/chevron-'.$a['color'].'.svg" data-fallback="'.get_template_directory_uri().'/assets/production/images/chevrons/chevron-'.$a['color'].'.png" alt=">>"/></div>';
 	}
 
 	// global context
 	function add_to_context($context){
 		$context['site'] = $this;
 		$context['url'] = get_bloginfo('url');
-		$context['template_url'] = get_bloginfo('template_url');
+		$context['template_url'] = get_template_directory_uri();
 		$context['footer_nav'] = new TimberMenu('Footer Nav');
 		$context['full_width_sections'] = array('testimonial', 'big_list');
 
@@ -202,6 +216,7 @@ class StarterSite extends TimberSite{
         include_once(__DIR__."/includes/Utility.class.php");
 
         //BROWSERS
+		$utility = new Utility();
 		$context['browsers'] = explode(' ', $utility->html_classes);
 
         //INDUSTRIES
@@ -315,7 +330,7 @@ function nps_register_new_royalslider_files()
 {
 	register_new_royalslider_files(1);
 }
-add_action( 'wp_enqueue_scripts', 'nps_register_new_royalslider_files' );
+//add_action( 'wp_enqueue_scripts', 'nps_register_new_royalslider_files' );
 
 // Video URL for RoyalSlider
 	class MyRoyalSliderRendererHelper {

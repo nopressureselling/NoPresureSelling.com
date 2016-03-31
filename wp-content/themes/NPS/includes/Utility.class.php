@@ -9,14 +9,14 @@ class Utility {
         $this->form = $form;
 
         if(file_exists(__DIR__.'/Browser.class.php')){
-            include(__DIR__.'/Browser.class.php');
+	        include_once(__DIR__.'/Browser.class.php');
             $browser = new Browser();
         }else{
             array_push($this->warnings, "Couldn't find Browser class in the same directory as the Utility class in ".__FILE__." on line ".__LINE__);
         }
 
         if(file_exists(__DIR__.'/MobileDetect.class.php')){
-            include(__DIR__.'/MobileDetect.class.php');
+	        include_once(__DIR__.'/MobileDetect.class.php');
             $mobile = new MobileDetect();
         }else{
             array_push($this->warnings, "Couldn't find MobileDetect class in the same directory as the Utility class ".__FILE__." on line ".__LINE__);
@@ -283,6 +283,3 @@ CCROTATOR;
 CLICKTALE;
     }
 }
-
-$utility = new Utility();
-$form = $utility->form;

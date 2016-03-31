@@ -1942,8 +1942,7 @@
 lesshat-selector {
   -lh-property: 0; } 
 @-webkit-keyframes spin{ 100%{ -webkit-transform: rotate(360deg); }}
-@keyframes spin{ 100%{-webkit-transform: rotate(360deg);-ms-transform: rotate(360deg);transform: rotate(360deg); };
-}
+@keyframes spin{ 100%{-webkit-transform: rotate(360deg);-ms-transform: rotate(360deg);transform: rotate(360deg); }}
 .vertical-padding {
   padding-top: 15px;
   padding-bottom: 15px;

@@ -28,7 +28,7 @@ $sections_array = array();
 $i = 0;
 foreach($sections as $section){
     if(in_array($section['acf_fc_layout'], $context['full_width_sections'])){ $i++; }
-    if(!$sections_array[$i]){
+    if(! isset($sections_array[$i])){
         $sections_array[$i] = array();
     }
     array_push($sections_array[$i], $section);
