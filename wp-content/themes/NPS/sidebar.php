@@ -8,4 +8,3 @@ $args = array(
 );
 $sidebar_context['pages'] = Timber::get_posts($args);
 $context['sidebar'] = Timber::get_sidebar('components/sidebar.twig', $sidebar_context);
-?>

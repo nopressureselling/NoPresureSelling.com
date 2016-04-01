@@ -8,4 +8,3 @@ $context['post'] = $post;
 // Render Template
 $templates = array('single.twig');
 Timber::render($templates, $context);
-?>

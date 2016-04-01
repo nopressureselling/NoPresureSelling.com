@@ -34,4 +34,3 @@ if($fields['industry']){
     $sidebar_context['slug'] = $url_array[0];
 }
 $context['sidebar'] = Timber::get_sidebar('components/sidebar-taxonomy.twig', $sidebar_context);
-?>

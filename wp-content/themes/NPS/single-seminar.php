@@ -7,12 +7,15 @@ $industry = get_the_terms($post->ID, 'industry');
 if($industry) {
     $industry = array_values($industry);
     $industry = $industry[0];
+	$industry_slug = $industry->slug . '/';
+} else {
+	$industry_slug = '';
 }
 $context['industry'] = $industry;
 
 
 // Breadcrumbs and Back Button
-$back_link = get_bloginfo('url').'/upcoming-seminars/'.$industry->slug.'/';
+$back_link = get_bloginfo('url').'/upcoming-seminars/'.$industry_slug;
 $context['back_link'] = $back_link;
 
 $context['breadcrumbs'] = array(

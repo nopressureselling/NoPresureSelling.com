@@ -23,8 +23,10 @@
 
                         <div class="vertical-padding clearfix">
 
+                            <div class="entry-content col-xs-12 col-sm-12 col-md-8 col-lg-8">{{ section.editor }}</div>
+
                             {% if i == 1 %}
-                                <div class="member-thumb">
+                                <div class="member-thumb col-xs-12 col-sm-12 col-md-4 col-lg-4">
                                     <div class="wrap">
                                         <img src="{{ TimberImage( post.get_field('thumbnail') ) }}" class="img-responsive"/>
                                     </div>
@@ -33,7 +35,6 @@
                                 </div>
                             {% endif %}
 
-                            {{ section.editor }}
 
                         </div>
 

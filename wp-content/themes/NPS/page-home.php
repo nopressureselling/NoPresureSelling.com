@@ -8,7 +8,7 @@ $context['post'] = $post;
 $sections = get_field('sections',$post->ID);
 
     // Check for industry cookie
-    $industry_id = (isset($_COOKIE['industry'])) ? $_COOKIE['industry'] : 'default';
+    $industry_id = (isset($_COOKIE['industry'])) ? esc_attr($_COOKIE['industry']) : 'default';
 
     // Cache default section
     global $default_section;
@@ -25,7 +25,7 @@ $sections = get_field('sections',$post->ID);
     foreach ($sections as $section) {
         if (isset($section['industry']->term_id) && $section['industry']->term_id == $industry_id){
             $context['section'] = $section;
-            $term = get_term( $_COOKIE['industry'], 'industry')->slug;
+            $term = get_term( esc_attr($_COOKIE['industry']), 'industry')->slug;
             $default = false;
             break;
         }
@@ -59,7 +59,7 @@ foreach ($promotions as $promotion){
 }
 // Sidebar Promo
 if (isset($_COOKIE['industry']) && $_COOKIE['industry'] !== false && $_COOKIE['industry'] !== null){
-	$industry = get_term( $_COOKIE['industry'], 'industry');
+	$industry = get_term( esc_attr($_COOKIE['industry']), 'industry');
 	$context['industry'] = $industry;
 }
 include_once('sidebar-promotion.php');

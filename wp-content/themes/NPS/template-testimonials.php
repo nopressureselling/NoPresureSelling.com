@@ -15,22 +15,18 @@ if($industry) {
 $context['industry'] = $industry;
 
 // Masthead
-if($post->masthead) {
-    $background_image = new TimberImage($post->background_image);
-    $context['masthead'] = array(
-        'image' => $background_image->src,
-        'text' => $post->title,
-        'particle_effect' => $post->particle_effect,
-        'particle_offset_top'   => ($post->particle_offset_top)?$post->particle_offset_top:'',
-        'particle_offset_left'  => ($post->particle_offset_left)?$post->particle_offset_left:''
-    );
+if ( isset( $post->masthead ) ) {
+	if ( !empty( $post->background_image ) ) {
+		$background_image = new TimberImage($post->background_image);
+		$context['masthead'] = array(
+			'image' => $background_image->src,
+			'text' => $post->title,
+			'particle_effect' => !empty($post->particle_effect) ? $post->particle_effect : '',
+			'particle_offset_top'   => !empty($post->particle_offset_top) ? $post->particle_offset_top : '',
+			'particle_offset_left'  => !empty($post->particle_offset_left) ? $post->particle_offset_left : '',
+		);
+	}
 }
-
-// Logos
-$context['logos'] = Timber::get_posts(array(
-    'post_type'     => 'client',
-    'industry'      => $industry->slug
-));
 
 
 //Testimonials
@@ -42,7 +38,14 @@ $args = array(
 );
 
 if($industry){
-    $args['industry'] = $industry->slug;
+
+	// Logos
+	$context['logos'] = Timber::get_posts(array(
+		'post_type'     => 'client',
+		'industry'      => $industry->slug
+	));
+
+	$args['industry'] = $industry->slug;
 }
 $testimonials = Timber::get_posts($args);
 $context['testimonials'] = $testimonials;

@@ -53,6 +53,9 @@ class StarterSite extends TimberSite{
             wp_register_style('theme_styles', get_template_directory_uri() . '/assets/production/css/styles.min.css', array(), false, 'all');
             wp_enqueue_style('theme_styles');
 
+            wp_register_style('add_on_styles', get_template_directory_uri() . '/assets/production/css/add-on.css', array(), false, 'all');
+            wp_enqueue_style('add_on_styles');
+
             wp_register_script('theme_scripts', $this->assets . '/js/scripts.min.js', false, null, true);
             wp_enqueue_script('theme_scripts');
 
@@ -207,17 +210,17 @@ class StarterSite extends TimberSite{
 		$context['footer_nav'] = new TimberMenu('Footer Nav');
 		$context['full_width_sections'] = array('testimonial', 'big_list');
 
-        //QUERY STRING PARAMS
+/*        //QUERY STRING PARAMS
         foreach($_GET as $k => $v){
             $context['get'][$k] = $v;
-        }
+        }*/
 
 		//UTILITY CLASS
-        include_once(__DIR__."/includes/Utility.class.php");
+        //include_once(__DIR__."/includes/Utility.class.php");
 
         //BROWSERS
-		$utility = new Utility();
-		$context['browsers'] = explode(' ', $utility->html_classes);
+		//$utility = new Utility();
+		//$context['browsers'] = explode(' ', $utility->html_classes);
 
         //INDUSTRIES
         $industries_terms = Timber::get_terms('industry',
@@ -243,10 +246,10 @@ class StarterSite extends TimberSite{
 
         $context['home_industry_dropdown'] = get_field('industry_dropdown', 2);
 
-		//TEST
+/*		//TEST
 		if(isset($_GET['test']) && $_GET['test'] == 1){
 			$context['test'] = 1;
-		}
+		}*/
 
 		return $context;
 	}
@@ -330,7 +333,7 @@ function nps_register_new_royalslider_files()
 {
 	register_new_royalslider_files(1);
 }
-//add_action( 'wp_enqueue_scripts', 'nps_register_new_royalslider_files' );
+add_action( 'wp_enqueue_scripts', 'nps_register_new_royalslider_files' );
 
 // Video URL for RoyalSlider
 	class MyRoyalSliderRendererHelper {

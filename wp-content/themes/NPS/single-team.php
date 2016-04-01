@@ -24,19 +24,25 @@ $sections = get_field('sections',$post->ID);
 $sections_array = array();
 $i = 0;
 foreach($sections as $section){
-    if(in_array($section['acf_fc_layout'], $context['full_width_sections'])){ $i++; }
-    if(!$sections_array[$i]){
-        $sections_array[$i] = array();
-    }
-    array_push($sections_array[$i], $section);
-    if(in_array($section['acf_fc_layout'], $context['full_width_sections'])){ $i++; }
+	if(in_array($section['acf_fc_layout'], $context['full_width_sections'])){
+		$i++;
+	}
+	if(isset($sections_array[$i]) && !$sections_array[$i] || !isset($sections_array[$i])){
+		$sections_array[$i] = array();
+	}
+	array_push($sections_array[$i], $section);
+	if(in_array($section['acf_fc_layout'], $context['full_width_sections'])){
+		$i++;
+	}
 }
 $context['sections'] = $sections_array;
 
 // Sidebar Context
 $sidebar_context = Timber::get_context();
 $sidebar_context['post'] = $post;
-$sidebar_context['industry'] = $industry;
+if ( isset( $industry ) ) {
+	$sidebar_context['industry'] = $industry;
+}
 include_once('sidebar-industry.php');
 
 // Render Template
