@@ -32,12 +32,12 @@ function ewww_image_optimizer_aux_images () {
 	}
 	date_default_timezone_set( $site_timezone );
 	?>
-	<h2><?php esc_html_e( 'Optimize Everything Else', EWWW_IMAGE_OPTIMIZER_DOMAIN ); ?></h2>
-		<div id="ewww-aux-forms"><p class="ewww-bulk-info"><?php esc_html_e( 'Use this tool to optimize images outside of the Media Library and galleries where we have full integration. Examples: theme images, BuddyPress, WP Symposium, and any folders that you have specified on the settings page.', EWWW_IMAGE_OPTIMIZER_DOMAIN ); ?></p>
+	<h2 class="ewww-bulk-aux"><?php esc_html_e( 'Optimize Everything Else', EWWW_IMAGE_OPTIMIZER_DOMAIN ); ?></h2>
+		<div id="ewww-aux-forms"><p class="ewww-aux-info ewww-bulk-info"><?php esc_html_e( 'Use this tool to optimize images outside of the Media Library and galleries where we have full integration. Examples: theme images, BuddyPress, WP Symposium, and any folders that you have specified on the settings page.', EWWW_IMAGE_OPTIMIZER_DOMAIN ); ?></p>
 		<?php if ( ! empty( $db_convert ) ) { ?>
 			<p class="ewww-bulk-info"><?php esc_html_e( 'The database schema has changed, you need to convert to the new format.', EWWW_IMAGE_OPTIMIZER_DOMAIN ); ?></p>
 			<form method="post" id="ewww-aux-convert" class="ewww-bulk-form" action="">
-				<?php wp_nonce_field( 'ewww-image-optimizer-aux-images', 'ewww_wpnonce' ); ?>
+				<?php wp_nonce_field( 'ewww-image-optimizer-aux-images-convert', 'ewww_wpnonce' ); ?>
 				<input type="hidden" name="ewww_convert" value="1">
 				<button id="ewww-table-convert" type="submit" class="button-secondary action"><?php esc_html_e( 'Convert Table', EWWW_IMAGE_OPTIMIZER_DOMAIN ); ?></button>
 			</form>
@@ -56,7 +56,7 @@ function ewww_image_optimizer_aux_images () {
 ?>
 			<p id="ewww-aux-reset-desc" class="ewww-bulk-info"><?php esc_html_e( 'If you would like to start over again, press the Reset Status button to reset the bulk operation status.', EWWW_IMAGE_OPTIMIZER_DOMAIN ); ?></p>
 			<form id="ewww-aux-reset" class="ewww-bulk-form" method="post" action="">
-				<?php wp_nonce_field( 'ewww-image-optimizer-aux-images', 'ewww_wpnonce' ); ?>
+				<?php wp_nonce_field( 'ewww-image-optimizer-aux-images-reset', 'ewww_wpnonce' ); ?>
 				<input type="hidden" name="ewww_reset_aux" value="1">
 				<button type="submit" class="button-secondary action"><?php esc_html_e( 'Reset Status', EWWW_IMAGE_OPTIMIZER_DOMAIN ); ?></button>
 			</form>
@@ -193,12 +193,23 @@ function ewww_image_optimizer_image_scan( $dir ) {
 			if ( preg_match( '/(\/|\\\\)\./', $path ) && apply_filters( 'ewww_image_optimizer_ignore_hidden_files', true ) ) {
 				continue;
 			}
-			if ( preg_match( '/\.(conf|crt|css|docx|eot|exe|git|gitignore|gitmodules|gz|hgignore|hgsub|hgsubstate|hgtags|htaccess|htm|html|ico|ini|js|json|key|less|lock|log|map|md|mo|mp3|mp4|otf|pdf|pem|php|po|pot|sample|scss|sh|svg|svnignore|swf|template|tiff|tmp|tpl|ttf|txt|url|vcl|woff|woff2|webp|xap|xml|yml|zip)$/', $path ) ) {
+			$pathextension = strtolower( pathinfo( $path, PATHINFO_EXTENSION ) );
+			switch ( $pathextension ) {
+				case 'jpg':
+				case 'jpeg':
+				case 'png':
+				case 'gif':
+				case 'pdf':
+					break;
+				default:
+					continue 2;
+			}
+/*			if ( preg_match( '/\.(conf|crt|css|docx|eot|exe|git|gitignore|gitmodules|gz|hgignore|hgsub|hgsubstate|hgtags|htaccess|htm|html|ico|ini|js|json|key|less|lock|log|map|md|mo|mp3|mp4|otf|pdf|pem|php|po|pot|sample|scss|sh|svg|svnignore|swf|template|tiff|tmp|tpl|ttf|txt|url|vcl|woff|woff2|webp|xap|xml|yml|zip)$/', $path ) ) {
 				continue;
 			}
 			if ( ! preg_match( '/\./', $path ) ) {
 				continue;
-			}
+			}*/
 			if ( isset( $optimized_list[$path] ) ) {
 				$image_size = $file->getSize();
 				if ( $optimized_list[ $path ] == $image_size ) {
@@ -399,7 +410,8 @@ function ewww_image_optimizer_aux_images_initialize( $auto = false ) {
 	$permissions = apply_filters( 'ewww_image_optimizer_bulk_permissions', '' );
 	if ( ! $auto && ( ! wp_verify_nonce( $_REQUEST['ewww_wpnonce'], 'ewww-image-optimizer-bulk' ) || ! current_user_can( $permissions ) ) ) {
 		wp_die( esc_html__( 'Access denied.', EWWW_IMAGE_OPTIMIZER_DOMAIN ) );
-	} 
+	}
+	$output = array(); 
 	// update the 'aux resume' option to show that an operation is in progress
 	update_option( 'ewww_image_optimizer_aux_resume', 'true' );
 	// store the time and number of images for later display
@@ -410,8 +422,17 @@ function ewww_image_optimizer_aux_images_initialize( $auto = false ) {
 		// generate the WP spinner image for display
 		$loading_image = plugins_url( '/images/wpspin.gif', __FILE__ );
 		$attachments = get_option( 'ewww_image_optimizer_aux_attachments' );
+		if ( ! is_array( $attachments ) && ! empty( $attachments ) ) {
+			$attachments = unserialize( $attachments );
+		}
+		if ( ! is_array( $attachments ) ) {
+			$output['error'] = esc_html__( 'Error retrieving list of images' );
+			echo json_encode( $output );
+			die();
+		}
 		$file = array_shift( $attachments );
-		echo "<p>" . esc_html__( 'Optimizing', EWWW_IMAGE_OPTIMIZER_DOMAIN ) . " <b>$file</b>&nbsp;<img src='$loading_image' alt='loading'/></p>";
+		$output['results'] = "<p>" . esc_html__( 'Optimizing', EWWW_IMAGE_OPTIMIZER_DOMAIN ) . " <b>$file</b>&nbsp;<img src='$loading_image' alt='loading'/></p>";
+		echo json_encode( $output );
 		ewwwio_memory( __FUNCTION__ );
 		die();
 	}
