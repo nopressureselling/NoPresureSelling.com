@@ -86,10 +86,17 @@ class ExportToCsvUtf8 extends ExportBase implements CFDBExport {
     public function echoCsv($formName) {
 
         $eol = "\n";
-        $delimiter = isset($this->options['delimiter']) ? 
-                $this->options['delimiter'] : 
-                $this->get_csv_delimiter(get_locale());
-
+        $delimiter = null;
+        if (isset($this->options['delimiter'])) {
+            $delimiter = $this->options['delimiter'];
+        } else if ($this->hasGoogleSpreadsheetHeader()) {
+            // Google Spreadsheet uses comma as a delimiter
+            $delimiter = ',';
+        } else {
+            // Pick a delimiter based on regional settings
+            $delimiter = $this->get_csv_delimiter(get_locale());
+        }
+        
         // Query DB for the data for that form
         $submitTimeKeyName = 'Submit_Time_Key';
         $this->setDataIterator($formName, $submitTimeKeyName);
@@ -154,6 +161,22 @@ class ExportToCsvUtf8 extends ExportBase implements CFDBExport {
             }
             echo $eol;
         }
+    }
+
+
+    public function hasGoogleSpreadsheetHeader() {
+        if (function_exists('getallheaders')) {
+            $clientHeaders = getallheaders();
+            if (!empty($clientHeaders) && isset($clientHeaders['User-Agent'])) {
+                if (strpos($clientHeaders['User-Agent'], 'GoogleDocs') !== false) {
+                    return true;
+                }
+                if (strpos($clientHeaders['User-Agent'], 'docs.google.com') !== false) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
